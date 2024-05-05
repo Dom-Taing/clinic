@@ -36,7 +36,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         prescription: req.body.prescription,
       })
       .select("*");
-    recordId = createdRecord?.data[0].invoiceNo;
+    recordId = createdRecord?.data?.[0].invoiceNo;
   } catch (error) {
     console.error("error", error);
     res.status(500).json({ error: "Internal server error" });
