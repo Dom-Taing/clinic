@@ -1,0 +1,36 @@
+export const formLabelEn = {
+  name: "Name",
+  sex: "Sex",
+  dob: "Date of Birth",
+  diagnosis: "Diagnosis",
+  medicine: "Medicine",
+  amount: "Amount",
+  usage: "Usage",
+  namePlaceholder: "Enter Patient Name",
+  sexOptions: {
+    male: "Male",
+    female: "Female",
+  },
+  addButton: "add",
+  medicineTitle: "Medicine",
+  doctor: "Doctor",
+  accountant: "Accountant",
+};
+export const formLabelKh = {
+  name: "ឈ្មោះ",
+  sex: "ភេទ",
+  dob: "ថ្ងៃខែ​ឆ្នាំ​កំណើត",
+  diagnosis: "រោគវិនិច្ឆ័យ",
+  medicine: "ឈ្មោះថ្នាំ",
+  amount: "ចំនួន",
+  usage: "ការប្រើប្រាស់",
+  namePlaceholder: "បញ្ចូលឈ្មោះអ្នកជំងឺ",
+  sexOptions: {
+    male: "ប្រុស",
+    female: "ស្រី",
+  },
+  addButton: "បញ្ចូល",
+  medicineTitle: "ថ្នាំ",
+  doctor: "Doctor",
+  accountant: "Accountant",
+};

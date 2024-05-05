@@ -2,10 +2,40 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
+import axios from "axios";
+import MedicalForm from "@/components/MedicalForm";
+import { GetServerSideProps, NextApiRequest, NextApiResponse } from "next";
+import { createSupaClient } from "@/service/supa";
+import { createClient } from "@supabase/supabase-js";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+interface HomeProps {
+  medicineList: { id: string; medicine: string; price: number }[];
+  diagnosisList: { id: string; name: string }[];
+  doctorList: { id: string; name: string }[];
+  accountantList: { id: string; name: string }[];
+  usageList: { id: string; usage: string }[];
+}
+
+export default function Home({
+  medicineList,
+  diagnosisList,
+  doctorList,
+  accountantList,
+  usageList,
+}: HomeProps) {
+  const handleClick = async () => {
+    const response = await axios.post("/api/pdf", {}, { responseType: "blob" });
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "generated.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  console.log("medicineList", medicineList);
   return (
     <>
       <Head>
@@ -15,100 +45,65 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{" "}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+        <MedicalForm
+          medicineList={medicineList}
+          diagnosisList={diagnosisList}
+          doctorList={doctorList}
+          accountantList={accountantList}
+          usageList={usageList}
+        />
       </main>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<HomeProps> = async (
+  context
+) => {
+  try {
+    const supabase = createSupaClient();
+
+    let { data: Medicine } = await supabase.from("Medicine").select("*");
+    let { data: Diagnosis } = await supabase.from("Sickness").select("*");
+    let { data: User } = await supabase.from("User").select("*");
+    let { data: Usage } = await supabase.from("Usage").select("*");
+    const doctor = User?.filter((user) => user.role === "doctor");
+    const accountant = User?.filter((user) => user.role === "accountant");
+
+    return {
+      props: {
+        medicineList: Medicine || [
+          { medicine: "Paracetamol", price: 0.1 },
+          { medicine: "Ibuprofen", price: 0.2 },
+          { medicine: "Aspirin", price: 0.3 },
+        ],
+        diagnosisList: Diagnosis || ["Headache", "Fever", "Cold", "Cough"],
+        doctorList: doctor || [
+          "Dr. John Doe",
+          "Dr. Jane Doe",
+          "Dr. Michael Doe",
+        ],
+        accountantList: accountant || [
+          "Mr. John Doe",
+          "Mr. Jane Doe",
+          "Mr. Michael Doe",
+        ],
+        usageList: Usage || ["Before meal", "After meal"],
+      },
+    };
+  } catch {
+    return {
+      props: {
+        medicineList: [
+          { medicine: "Paracetamol", price: 0.1 },
+          { medicine: "Ibuprofen", price: 0.2 },
+          { medicine: "Aspirin", price: 0.3 },
+        ],
+        diagnosisList: ["Headache", "Fever", "Cold", "Cough"],
+        doctorList: ["Dr. John Doe", "Dr. Jane Doe", "Dr. Michael Doe"],
+        accountantList: ["Mr. John Doe", "Mr. Jane Doe", "Mr. Michael Doe"],
+        usageList: ["Before meal", "After meal"],
+      },
+    };
+  }
+};
