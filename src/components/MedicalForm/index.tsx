@@ -1,4 +1,5 @@
 import {
+  Alert,
   Autocomplete,
   Button,
   FormControl,
@@ -27,7 +28,7 @@ interface FormProps {
 interface PersonalInfo {
   name: string;
   sex: string;
-  dob: string;
+  age: number;
   diagnosis: string;
   medicine: string;
   amount: number;
@@ -37,6 +38,19 @@ interface PersonalInfo {
 interface Prescription {
   medicine: string;
   amount: number;
+  unitPrice: number;
+  totalPrice: number;
+  usage: string;
+}
+
+interface ErrorType {
+  general: string;
+  name: string;
+  age: string;
+  sex: string;
+  diagnosis: string;
+  medicine: string;
+  amount: string;
   usage: string;
 }
 
@@ -65,7 +79,7 @@ const MedicalForm: React.FC<FormProps> = ({
   const [formData, setFormData] = useState<PersonalInfo>({
     name: "",
     sex: "",
-    dob: "",
+    age: 0,
     diagnosis: "",
     medicine: "",
     amount: 0,
@@ -76,6 +90,16 @@ const MedicalForm: React.FC<FormProps> = ({
     accountant: "",
   });
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+  const [error, setError] = useState<ErrorType>({
+    general: "",
+    name: "",
+    sex: "",
+    age: "",
+    diagnosis: "",
+    medicine: "",
+    amount: "",
+    usage: "",
+  });
 
   const printJS = useRef<any>();
 
@@ -83,21 +107,40 @@ const MedicalForm: React.FC<FormProps> = ({
     printJS.current = require("print-js");
   }, []);
 
-  const onFormDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.name, e.target.value, typeof e.target.value);
+  const onFormDataChange = (
+    e: any,
+    name: string | null = null,
+    value: string | null = null
+  ) => {
+    const objName = name || e.target.name;
+    const objValue = value || e.target.value;
+    console.log(objName, objValue);
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [objName]: objValue,
+    });
+    setError({
+      ...error,
+      [objName]: "",
     });
   };
 
   const onClickAddMedicine = () => {
+    if (!formData.medicine) {
+      setError((prev: any) => ({ ...prev, medicine: "Medicine is required" }));
+      return;
+    }
+    const unitPrice =
+      medicineList.find((m) => m.medicine === formData.medicine)?.price || 0;
+    const totalPrice = unitPrice * formData.amount;
     setPrescriptions([
       ...prescriptions,
       {
         medicine: formData.medicine,
         amount: formData.amount,
         usage: formData.usage,
+        unitPrice: unitPrice,
+        totalPrice: totalPrice,
       },
     ]);
     setFormData({
@@ -109,7 +152,6 @@ const MedicalForm: React.FC<FormProps> = ({
   };
 
   const onClickDeleteMedicine = (index: number) => {
-    console.log(index, prescriptions[index]);
     setPrescriptions(prescriptions.filter((_, i) => i !== index));
   };
 
@@ -117,7 +159,7 @@ const MedicalForm: React.FC<FormProps> = ({
     setFormData({
       name: "",
       sex: "",
-      dob: "",
+      age: 0,
       diagnosis: "",
       medicine: "",
       amount: 0,
@@ -130,46 +172,14 @@ const MedicalForm: React.FC<FormProps> = ({
     try {
       const today = new Date();
       const todayDate = today.toISOString().split("T")[0];
-      console.log({
-        name: formData.name,
-        sex: formData.sex,
-        age: getAge(formData.dob),
-        dob: formData.dob,
-        diagnosis: diagnosisList.find(
-          (item) => item.name === formData.diagnosis
-        ),
-        prescription: prescriptions.map((item) => {
-          const med = medicineList.find((m) => m.medicine === item.medicine);
-          return {
-            ...item,
-            price: med?.price || 0,
-            id: med?.id,
-          };
-        }),
-        date: todayDate,
-        doctor: doctorList.find((item) => item.name === employeeInfo.doctor),
-        accountant: accountantList.find(
-          (item) => item.name === employeeInfo.accountant
-        ),
-      });
       const response = await axios.post(
         "/api/pdf",
         {
           name: formData.name,
           sex: formData.sex,
-          age: getAge(formData.dob),
-          dob: formData.dob,
-          diagnosis: diagnosisList.find(
-            (item) => item.name === formData.diagnosis
-          ),
-          prescription: prescriptions.map((item) => {
-            const med = medicineList.find((m) => m.medicine === item.medicine);
-            return {
-              ...item,
-              price: med?.price || 0,
-              id: med?.id,
-            };
-          }),
+          age: formData.age,
+          diagnosis: formData.diagnosis,
+          prescription: prescriptions,
           date: todayDate,
           doctor: doctorList.find((item) => item.name === employeeInfo.doctor),
           accountant: accountantList.find(
@@ -186,10 +196,13 @@ const MedicalForm: React.FC<FormProps> = ({
         type: "pdf",
         onPrintDialogClose: () => {
           URL.revokeObjectURL(pdfUrl);
+          onClickFormCancel();
         },
       });
+      setError({ ...error, general: "" });
     } catch (error) {
       console.log(error);
+      setError((prev: any) => ({ ...prev, general: "Something went wrong!" }));
     }
   };
 
@@ -198,6 +211,11 @@ const MedicalForm: React.FC<FormProps> = ({
       <StyledPaper elevation={2}>
         <FormControl fullWidth>
           <Grid container spacing={3}>
+            {error.general && (
+              <Grid item xs={12}>
+                <Alert severity="error">{error.general}</Alert>
+              </Grid>
+            )}
             <Grid item xs={8}>
               <h2>Form</h2>
             </Grid>
@@ -208,7 +226,6 @@ const MedicalForm: React.FC<FormProps> = ({
                 // freeSolo
                 value={employeeInfo.doctor}
                 onChange={(e, newValue) => {
-                  console.log(newValue);
                   setEmployeeInfo({
                     ...employeeInfo,
                     doctor: newValue || "",
@@ -227,7 +244,6 @@ const MedicalForm: React.FC<FormProps> = ({
                 // freeSolo
                 value={employeeInfo.accountant}
                 onChange={(e, newValue) => {
-                  console.log(newValue);
                   setEmployeeInfo({
                     ...employeeInfo,
                     accountant: newValue || "",
@@ -245,16 +261,17 @@ const MedicalForm: React.FC<FormProps> = ({
                 label={formLabel.name}
                 placeholder={formLabel.namePlaceholder}
                 fullWidth
-                onChange={onFormDataChange}
+                onChange={(e) => onFormDataChange(e)}
                 name="name"
                 value={formData.name}
+                error={!!error.name}
               />
             </Grid>
             <Grid item xs={2}>
               <TextField
                 label={formLabel.sex}
                 fullWidth
-                onChange={onFormDataChange}
+                onChange={(e) => onFormDataChange(e)}
                 select
                 name="sex"
                 value={formData.sex}
@@ -267,30 +284,26 @@ const MedicalForm: React.FC<FormProps> = ({
             </Grid>
             <Grid item xs={4}>
               <TextField
-                type="date"
-                variant="outlined"
-                color="secondary"
-                label={formLabel.dob}
-                required
-                InputLabelProps={{ shrink: true }}
+                type="number"
+                label={formLabel.age}
                 fullWidth
-                onChange={onFormDataChange}
-                value={formData.dob}
-                name="dob"
+                name="age"
+                value={formData.age}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  e.target.value = value.replace(/^0+/, "") || "0";
+                  onFormDataChange(e);
+                }}
               />
             </Grid>
             <Grid item xs={12}>
               <Autocomplete
                 disablePortal
                 options={diagnosisList.map((item) => item.name)}
-                // freeSolo
+                freeSolo
                 value={formData.diagnosis}
                 onChange={(e, newValue) => {
-                  console.log(newValue);
-                  setFormData({
-                    ...formData,
-                    diagnosis: newValue || "",
-                  });
+                  onFormDataChange(e, "diagnosis", newValue || "");
                 }}
                 autoSelect
                 renderInput={(params) => (
@@ -305,15 +318,18 @@ const MedicalForm: React.FC<FormProps> = ({
                 // freeSolo
                 value={formData.medicine}
                 onChange={(e, newValue) => {
-                  console.log(newValue);
-                  setFormData({
-                    ...formData,
-                    medicine: newValue || "",
-                  });
+                  onFormDataChange(e, "medicine", newValue || "");
+                }}
+                onInputChange={() => {
+                  setError({ ...error, medicine: "" });
                 }}
                 autoSelect
                 renderInput={(params) => (
-                  <TextField {...params} label={formLabel.medicine} />
+                  <TextField
+                    {...params}
+                    label={formLabel.medicine}
+                    error={!!error.medicine}
+                  />
                 )}
               />
             </Grid>
@@ -338,11 +354,7 @@ const MedicalForm: React.FC<FormProps> = ({
                 // freeSolo
                 value={formData.usage}
                 onChange={(e, newValue) => {
-                  console.log(newValue);
-                  setFormData({
-                    ...formData,
-                    usage: newValue || "",
-                  });
+                  onFormDataChange(e, "usage", newValue || "");
                 }}
                 autoSelect
                 renderInput={(params) => (
@@ -369,6 +381,8 @@ const MedicalForm: React.FC<FormProps> = ({
                   { display: formLabel.medicine, key: "medicine" },
                   { display: formLabel.amount, key: "amount" },
                   { display: formLabel.usage, key: "usage" },
+                  { display: formLabel.unitPrice, key: "unitPrice" },
+                  { display: formLabel.totalPrice, key: "totalPrice" },
                   { display: "action", key: "action" },
                 ]}
                 data={prescriptions.map((item, index) => ({

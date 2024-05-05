@@ -4,6 +4,7 @@ import {
   prescriptionPdfConfigEn,
   prescriptionPdfConfigKh,
 } from "./config";
+import path from "path";
 
 interface Prescriptiondata {
   prescription: { medicine: string; amount: number; usage: string }[];
@@ -57,7 +58,9 @@ export const createPrescriptionPdf = async (
   // logo
   xPos = margin;
   yPos = 8;
-  doc.image("public/logo.jpg", xPos, yPos, { width: 60 });
+  doc.image(path.resolve("./public/logo.jpg"), xPos, yPos, {
+    width: 60,
+  });
 
   // Add Title
   doc.fontSize(titleFontSize);
@@ -352,7 +355,9 @@ export const createInvoicePdf = async (
   // logo
   xPos = margin;
   yPos = 8;
-  doc.image("public/logo.jpg", xPos, yPos, { width: 60 });
+  doc.image(path.resolve("./public/logo.jpg"), xPos, yPos, {
+    width: 60,
+  });
   return;
 };
 
