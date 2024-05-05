@@ -2,6 +2,7 @@ export const formLabelEn = {
   name: "Name",
   sex: "Sex",
   dob: "Date of Birth",
+  age: "Age",
   diagnosis: "Diagnosis",
   medicine: "Medicine",
   amount: "Amount",
@@ -15,11 +16,14 @@ export const formLabelEn = {
   medicineTitle: "Medicine",
   doctor: "Doctor",
   accountant: "Accountant",
+  unitPrice: "Unit Price",
+  totalPrice: "Total Price",
 };
 export const formLabelKh = {
   name: "ឈ្មោះ",
   sex: "ភេទ",
   dob: "ថ្ងៃខែ​ឆ្នាំ​កំណើត",
+  age: "អាយុ",
   diagnosis: "រោគវិនិច្ឆ័យ",
   medicine: "ឈ្មោះថ្នាំ",
   amount: "ចំនួន",
@@ -31,6 +35,8 @@ export const formLabelKh = {
   },
   addButton: "បញ្ចូល",
   medicineTitle: "ថ្នាំ",
-  doctor: "Doctor",
-  accountant: "Accountant",
+  doctor: "វេជ្ជបណ្ឌិត",
+  accountant: "គណនេយ្យករ",
+  unitPrice: "តម្លៃរាយ",
+  totalPrice: "តម្លៃសរុប",
 };
