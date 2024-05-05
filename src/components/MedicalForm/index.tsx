@@ -14,7 +14,6 @@ import axios from "axios";
 import DataTable from "../DataTable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "@emotion/styled";
-import dynamic from "next/dynamic";
 import { getAge } from "@/utils/date";
 
 interface FormProps {
@@ -54,7 +53,7 @@ const Wrapper = styled.div`
   max-width: 1000px;
 `;
 
-const formLabel = formLabelEn;
+const formLabel = formLabelKh;
 
 const MedicalForm: React.FC<FormProps> = ({
   medicineList = [],
