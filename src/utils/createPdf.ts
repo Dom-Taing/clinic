@@ -6,13 +6,24 @@ import {
 } from "./config";
 import path from "path";
 
+interface Prescription {
+  medicine: string;
+  amount: number;
+  unitPrice: number;
+  totalPrice: number;
+  usage: string;
+}
+interface User {
+  name_kh: string;
+}
 interface Prescriptiondata {
-  prescription: { medicine: string; amount: number; usage: string }[];
+  prescription: Prescription[];
   name: string;
   sex: string;
   age: number;
   diagnosis: string;
   date: string;
+  doctor: User;
 }
 
 interface InvoiceData {
@@ -21,7 +32,7 @@ interface InvoiceData {
   sex: string;
   age: number;
   date: string;
-  prescription: { medicine: string; amount: number; price: number }[];
+  prescription: Prescription[];
 }
 
 // function addFonts(doc) {
@@ -37,7 +48,7 @@ function formatDateKh(date: string) {
 export const createPrescriptionPdf = async (
   doc: any,
   language: "kh" | "en",
-  { prescription, name, sex, age, diagnosis, date }: Prescriptiondata
+  { prescription, name, sex, age, diagnosis, date, doctor }: Prescriptiondata
 ) => {
   const { content, ...prescriptionPdfConfig } =
     language === "kh" ? prescriptionPdfConfigKh : prescriptionPdfConfigEn;
@@ -117,40 +128,61 @@ export const createPrescriptionPdf = async (
     });
 
   // prescription medicine title
+  const columnWidth = [
+    (pageWidth - margin * 2) / 2,
+    (pageWidth - margin * 2) / 6,
+    (pageWidth - margin * 2) / 3,
+  ];
   doc.fontSize(normalFontSize);
+  xPos = margin;
   doc
     .font(prescriptionPdfConfig.khFont)
-    .text(prescriptionLabel.medicine, { underline: true })
-    .moveUp(1);
-  doc
-    .font(prescriptionPdfConfig.khFont)
-    .text(prescriptionLabel.amount, { align: "center", underline: true })
-    .moveUp(1);
-  doc
-    .font(prescriptionPdfConfig.khFont)
-    .text(prescriptionLabel.usage, pageWidth / 2, doc.y, {
-      align: "center",
+    .text(prescriptionLabel.medicine, xPos, doc.y, {
       underline: true,
+      width: columnWidth[0],
+    })
+    .moveUp(1);
+  xPos += columnWidth[0];
+  doc
+    .font(prescriptionPdfConfig.khFont)
+    .text(prescriptionLabel.amount, xPos, doc.y, {
+      align: "left",
+      underline: true,
+      width: columnWidth[1],
+    })
+    .moveUp(1);
+  xPos += columnWidth[1];
+  doc
+    .font(prescriptionPdfConfig.khFont)
+    .text(prescriptionLabel.usage, xPos, doc.y, {
+      align: "left",
+      underline: true,
+      width: columnWidth[2],
     });
   doc.moveDown(0.5);
 
   // medicine
   prescription.forEach((item, index) => {
+    let startX = margin;
+    let startY = doc.y;
     doc
       .font(prescriptionPdfConfig.enFont)
-      .text(`${index + 1}-`, 0, doc.y, { align: "right", width: margin })
-      .moveUp(1);
-    xPos = margin;
-    doc.font(prescriptionPdfConfig.enFont).text(item.medicine, xPos).moveUp(1);
+      .text(`${index + 1}-`, 0, startY, { align: "right", width: margin });
+    doc
+      .font(prescriptionPdfConfig.enFont)
+      .text(item.medicine, startX, startY, { width: columnWidth[0] });
+    startX += columnWidth[0];
     doc
       .font(prescriptionPdfConfig.khFont)
-      .text(`${item.amount.toString()} គ្រាប់`, { align: "center" })
-      .moveUp(1);
-    doc
-      .font(prescriptionPdfConfig.khFont)
-      .text(item.usage, pageWidth / 2, doc.y, {
-        align: "center",
+      .text(`${item.amount.toString()} គ្រាប់`, startX, startY, {
+        align: "left",
+        width: columnWidth[1],
       });
+    startX += columnWidth[1];
+    doc.font(prescriptionPdfConfig.khFont).text(item.usage, startX, startY, {
+      align: "left",
+      width: columnWidth[2],
+    });
     doc.moveDown(1);
   });
   // date
@@ -160,10 +192,22 @@ export const createPrescriptionPdf = async (
     .font(prescriptionPdfConfig.khFont)
     .text(formatDateKh(date), xPos, yPos, { align: "right" });
 
+  if (doctor.name_kh) {
+    yPos = doc.page.height - doc.page.margins.bottom - 48;
+    xPos = margin;
+    doc
+      .fillColor("#5e5eff")
+      .font(prescriptionPdfConfig.titleFont)
+      .fontSize(subTitleFontSize)
+      .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
+        align: "right",
+      });
+  }
   // footer
   yPos = doc.page.height - doc.page.margins.bottom - 16;
   xPos = margin;
   doc.fontSize(normalFontSize);
+  doc.fillColor("black");
   doc.font(prescriptionPdfConfig.khFont).text(content.bottomText, xPos, yPos);
   return;
 };
@@ -276,11 +320,11 @@ export const createInvoicePdf = async (
         width: cellWidth[2],
         align: "center",
       })
-      .text(med.price + " ៛", cellXPos[3], yPos, {
+      .text(med.unitPrice + " ៛", cellXPos[3], yPos, {
         width: cellWidth[3],
         align: "center",
       })
-      .text(med.price * med.amount + " ៛", cellXPos[4], yPos, {
+      .text(med.totalPrice * med.amount + " ៛", cellXPos[4], yPos, {
         width: cellWidth[4],
         align: "center",
       });
@@ -291,8 +335,8 @@ export const createInvoicePdf = async (
     .lineTo(cellXPos[4] + cellWidth[4], doc.y)
     .stroke();
 
-  const totalAmount = prescription.reduce((acc: number, item: any) => {
-    return acc + item.amount * item.price;
+  const totalAmount = prescription.reduce((acc: number, item: Prescription) => {
+    return acc + item.amount * item.unitPrice;
   }, 0);
   doc
     .fontSize(8)

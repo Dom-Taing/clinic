@@ -16,6 +16,7 @@ import DataTable from "../DataTable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "@emotion/styled";
 import { getAge } from "@/utils/date";
+import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
 
 interface FormProps {
   medicineList: { id: string; medicine: string; price: number }[];
@@ -100,6 +101,7 @@ const MedicalForm: React.FC<FormProps> = ({
     amount: "",
     usage: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const printJS = useRef<any>();
 
@@ -170,6 +172,7 @@ const MedicalForm: React.FC<FormProps> = ({
 
   const onClickSubmit = async () => {
     try {
+      setLoading(true);
       const today = new Date();
       const todayDate = today.toISOString().split("T")[0];
       const response = await axios.post(
@@ -196,237 +199,247 @@ const MedicalForm: React.FC<FormProps> = ({
         type: "pdf",
         onPrintDialogClose: () => {
           URL.revokeObjectURL(pdfUrl);
-          onClickFormCancel();
         },
       });
       setError({ ...error, general: "" });
     } catch (error) {
       console.log(error);
       setError((prev: any) => ({ ...prev, general: "Something went wrong!" }));
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Wrapper>
-      <StyledPaper elevation={2}>
-        <FormControl fullWidth>
-          <Grid container spacing={3}>
-            {error.general && (
-              <Grid item xs={12}>
-                <Alert severity="error">{error.general}</Alert>
+    <>
+      <Wrapper>
+        <StyledPaper elevation={2}>
+          <FormControl fullWidth>
+            <Grid container spacing={3}>
+              {error.general && (
+                <Grid item xs={12}>
+                  <Alert severity="error">{error.general}</Alert>
+                </Grid>
+              )}
+              <Grid item xs={8}>
+                <h2>Form</h2>
               </Grid>
-            )}
-            <Grid item xs={8}>
-              <h2>Form</h2>
-            </Grid>
-            <Grid item xs={2}>
-              <Autocomplete
-                disablePortal
-                options={doctorList.map((item) => item.name)}
-                // freeSolo
-                value={employeeInfo.doctor}
-                onChange={(e, newValue) => {
-                  setEmployeeInfo({
-                    ...employeeInfo,
-                    doctor: newValue || "",
-                  });
-                }}
-                autoSelect
-                renderInput={(params) => (
-                  <TextField {...params} label={formLabel.doctor} />
-                )}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <Autocomplete
-                disablePortal
-                options={accountantList.map((item) => item.name)}
-                // freeSolo
-                value={employeeInfo.accountant}
-                onChange={(e, newValue) => {
-                  setEmployeeInfo({
-                    ...employeeInfo,
-                    accountant: newValue || "",
-                  });
-                }}
-                autoSelect
-                renderInput={(params) => (
-                  <TextField {...params} label={formLabel.accountant} />
-                )}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                id="name-field"
-                label={formLabel.name}
-                placeholder={formLabel.namePlaceholder}
-                fullWidth
-                onChange={(e) => onFormDataChange(e)}
-                name="name"
-                value={formData.name}
-                error={!!error.name}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <TextField
-                label={formLabel.sex}
-                fullWidth
-                onChange={(e) => onFormDataChange(e)}
-                select
-                name="sex"
-                value={formData.sex}
+              <Grid item xs={2}>
+                <Autocomplete
+                  disablePortal
+                  options={doctorList.map((item) => item.name)}
+                  // freeSolo
+                  value={employeeInfo.doctor}
+                  onChange={(e, newValue) => {
+                    setEmployeeInfo({
+                      ...employeeInfo,
+                      doctor: newValue || "",
+                    });
+                  }}
+                  autoSelect
+                  renderInput={(params) => (
+                    <TextField {...params} label={formLabel.doctor} />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Autocomplete
+                  disablePortal
+                  options={accountantList.map((item) => item.name)}
+                  // freeSolo
+                  value={employeeInfo.accountant}
+                  onChange={(e, newValue) => {
+                    setEmployeeInfo({
+                      ...employeeInfo,
+                      accountant: newValue || "",
+                    });
+                  }}
+                  autoSelect
+                  renderInput={(params) => (
+                    <TextField {...params} label={formLabel.accountant} />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="name-field"
+                  label={formLabel.name}
+                  placeholder={formLabel.namePlaceholder}
+                  fullWidth
+                  onChange={(e) => onFormDataChange(e)}
+                  name="name"
+                  value={formData.name}
+                  error={!!error.name}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  label={formLabel.sex}
+                  fullWidth
+                  onChange={(e) => onFormDataChange(e)}
+                  select
+                  name="sex"
+                  value={formData.sex}
+                >
+                  <MenuItem value={"male"}>
+                    {formLabel.sexOptions.male}
+                  </MenuItem>
+                  <MenuItem value={"female"}>
+                    {formLabel.sexOptions.female}
+                  </MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  type="number"
+                  label={formLabel.age}
+                  fullWidth
+                  name="age"
+                  value={formData.age}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    e.target.value = value.replace(/^0+/, "") || "0";
+                    onFormDataChange(e);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Autocomplete
+                  disablePortal
+                  options={diagnosisList.map((item) => item.name)}
+                  freeSolo
+                  value={formData.diagnosis}
+                  onChange={(e, newValue) => {
+                    onFormDataChange(e, "diagnosis", newValue || "");
+                  }}
+                  autoSelect
+                  renderInput={(params) => (
+                    <TextField {...params} label={formLabel.diagnosis} />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Autocomplete
+                  disablePortal
+                  options={medicineList.map((item) => item.medicine)}
+                  // freeSolo
+                  value={formData.medicine}
+                  onChange={(e, newValue) => {
+                    onFormDataChange(e, "medicine", newValue || "");
+                  }}
+                  onInputChange={() => {
+                    setError({ ...error, medicine: "" });
+                  }}
+                  autoSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={formLabel.medicine}
+                      error={!!error.medicine}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  type="number"
+                  label={formLabel.amount}
+                  fullWidth
+                  name="amount"
+                  value={formData.amount}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    e.target.value = value.replace(/^0+/, "") || "0";
+                    onFormDataChange(e);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Autocomplete
+                  disablePortal
+                  options={usageList.map((item) => item.usage)}
+                  // freeSolo
+                  value={formData.usage}
+                  onChange={(e, newValue) => {
+                    onFormDataChange(e, "usage", newValue || "");
+                  }}
+                  autoSelect
+                  renderInput={(params) => (
+                    <TextField {...params} label={formLabel.usage} />
+                  )}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={1}
+                style={{ display: "flex", alignItems: "center" }}
               >
-                <MenuItem value={"male"}>{formLabel.sexOptions.male}</MenuItem>
-                <MenuItem value={"female"}>
-                  {formLabel.sexOptions.female}
-                </MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                type="number"
-                label={formLabel.age}
-                fullWidth
-                name="age"
-                value={formData.age}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  e.target.value = value.replace(/^0+/, "") || "0";
-                  onFormDataChange(e);
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={onClickAddMedicine}
+                >
+                  {formLabel.addButton}
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <h3>{formLabel.medicineTitle}</h3>
+              </Grid>
+              <Grid item xs={12}>
+                <DataTable
+                  header={[
+                    { display: formLabel.medicine, key: "medicine" },
+                    { display: formLabel.amount, key: "amount" },
+                    { display: formLabel.usage, key: "usage" },
+                    { display: formLabel.unitPrice, key: "unitPrice" },
+                    { display: formLabel.totalPrice, key: "totalPrice" },
+                    { display: "action", key: "action" },
+                  ]}
+                  data={prescriptions.map((item, index) => ({
+                    ...item,
+                    action: (
+                      <IconButton
+                        aria-label="delete"
+                        color="error"
+                        onClick={() => onClickDeleteMedicine(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    ),
+                  }))}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "1rem",
                 }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Autocomplete
-                disablePortal
-                options={diagnosisList.map((item) => item.name)}
-                freeSolo
-                value={formData.diagnosis}
-                onChange={(e, newValue) => {
-                  onFormDataChange(e, "diagnosis", newValue || "");
-                }}
-                autoSelect
-                renderInput={(params) => (
-                  <TextField {...params} label={formLabel.diagnosis} />
-                )}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Autocomplete
-                disablePortal
-                options={medicineList.map((item) => item.medicine)}
-                // freeSolo
-                value={formData.medicine}
-                onChange={(e, newValue) => {
-                  onFormDataChange(e, "medicine", newValue || "");
-                }}
-                onInputChange={() => {
-                  setError({ ...error, medicine: "" });
-                }}
-                autoSelect
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label={formLabel.medicine}
-                    error={!!error.medicine}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <TextField
-                type="number"
-                label={formLabel.amount}
-                fullWidth
-                name="amount"
-                value={formData.amount}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  e.target.value = value.replace(/^0+/, "") || "0";
-                  onFormDataChange(e);
-                }}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Autocomplete
-                disablePortal
-                options={usageList.map((item) => item.usage)}
-                // freeSolo
-                value={formData.usage}
-                onChange={(e, newValue) => {
-                  onFormDataChange(e, "usage", newValue || "");
-                }}
-                autoSelect
-                renderInput={(params) => (
-                  <TextField {...params} label={formLabel.usage} />
-                )}
-              />
-            </Grid>
-            <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                onClick={onClickAddMedicine}
               >
-                {formLabel.addButton}
-              </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={onClickSubmit}
+                >
+                  {formLabel.submit}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={onClickFormCancel}
+                >
+                  {formLabel.clear}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <h3>{formLabel.medicineTitle}</h3>
-            </Grid>
-            <Grid item xs={12}>
-              <DataTable
-                header={[
-                  { display: formLabel.medicine, key: "medicine" },
-                  { display: formLabel.amount, key: "amount" },
-                  { display: formLabel.usage, key: "usage" },
-                  { display: formLabel.unitPrice, key: "unitPrice" },
-                  { display: formLabel.totalPrice, key: "totalPrice" },
-                  { display: "action", key: "action" },
-                ]}
-                data={prescriptions.map((item, index) => ({
-                  ...item,
-                  action: (
-                    <IconButton
-                      aria-label="delete"
-                      color="error"
-                      onClick={() => onClickDeleteMedicine(index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  ),
-                }))}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "1rem",
-              }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={onClickSubmit}
-              >
-                Submit
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={onClickFormCancel}
-              >
-                Cancel
-              </Button>
-            </Grid>
-          </Grid>
-        </FormControl>
-      </StyledPaper>
-    </Wrapper>
+          </FormControl>
+        </StyledPaper>
+      </Wrapper>
+      <LoadingScreen isOn={loading} />
+    </>
   );
 };
 export default MedicalForm;

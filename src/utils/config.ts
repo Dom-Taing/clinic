@@ -20,6 +20,7 @@ export const prescriptionPdfConfigEn = {
       amount: "Amount",
       usage: "Usage",
     },
+    doctorTitle: "Dr.",
     bottomText: "This is a sample text for the bottom of the page.",
   },
 };
@@ -76,6 +77,7 @@ export const prescriptionPdfConfigKh = {
       amount: "ចំនួន",
       usage: "ការប្រើប្រាស់",
     },
+    doctorTitle: "វេជ្ជ.",
     bottomText: "សូមយកវេជ្ជបញ្ជានេះមកវិញ ពេលមកពិនិត្យលេីកក្រោយ",
   },
 };
@@ -100,7 +102,7 @@ export const invoicePdfConfigKh = {
         { header: "លរ\n ", dataKey: "No" },
         { header: "បរិយាយមុខទំនិញ\nDescription", dataKey: "Description" },
         { header: "បរិមាណ\nQty", dataKey: "Qty" },
-        { header: "តម្លៃរាយ\nUnit Price", dataKey: "Unit Price" },
+        { header: "តម្លៃរាយ\nUnit Price", dataKey: "unitPrice" },
         { header: "តម្លៃទំនិញ\nAmount", dataKey: "Amount" },
       ],
       totalLabel: "តម្លៃសរុប",

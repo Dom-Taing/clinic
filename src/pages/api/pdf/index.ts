@@ -62,6 +62,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     age: req.body.age,
     diagnosis: req.body.diagnosis,
     date: req.body.date,
+    doctor: req.body.doctor,
   });
   doc.addPage({ margin: 24, size: "A5" });
 

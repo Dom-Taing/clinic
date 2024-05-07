@@ -18,6 +18,8 @@ export const formLabelEn = {
   accountant: "Accountant",
   unitPrice: "Unit Price",
   totalPrice: "Total Price",
+  submit: "Submit",
+  clear: "Clear",
 };
 export const formLabelKh = {
   name: "ឈ្មោះ",
@@ -39,4 +41,6 @@ export const formLabelKh = {
   accountant: "គណនេយ្យករ",
   unitPrice: "តម្លៃរាយ",
   totalPrice: "តម្លៃសរុប",
+  submit: "ដាក់បញ្ចូល",
+  clear: "សំអាត",
 };
