@@ -12,6 +12,10 @@ export const prescriptionPdfConfigEn = {
     titleTextLine2: "Second Line",
     nameLabel: "Name:",
     sexLabel: "Sex:  ",
+    sexValue: {
+      male: "Male",
+      female: "Female",
+    },
     ageLabel: "Age:  ",
     diagnosisLabel: "Diagnosis:  ",
     prescriptionLabel: {
@@ -22,6 +26,7 @@ export const prescriptionPdfConfigEn = {
     },
     doctorTitle: "Dr.",
     bottomText: "This is a sample text for the bottom of the page.",
+    address: "test",
   },
 };
 
@@ -69,6 +74,10 @@ export const prescriptionPdfConfigKh = {
     titleTextLine2: "SOK SAN POLYCLINIC",
     nameLabel: "ឈ្មោះ:  ",
     sexLabel: "ភេទ:  ",
+    sexValue: {
+      male: "ប្រុស",
+      female: "ស្រី",
+    },
     ageLabel: "អាយុ:  ",
     diagnosisLabel: "រោគវិនិច្ឆ័យ:  ",
     prescriptionLabel: {
@@ -79,6 +88,8 @@ export const prescriptionPdfConfigKh = {
     },
     doctorTitle: "វេជ្ជ.",
     bottomText: "សូមយកវេជ្ជបញ្ជានេះមកវិញ ពេលមកពិនិត្យលេីកក្រោយ",
+    address:
+      "ផ្ទះលេខ ៧៦៨, ផ្លូវជាតិលេខ ៥ គីឡូម៉ែត្រលេខ ៦, ខណ្ឌ ឬស្សីកែវ រាជធានីភ្នំពេញ Tel: 010/017 89 22 89",
   },
 };
 

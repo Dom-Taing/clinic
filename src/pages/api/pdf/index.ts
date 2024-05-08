@@ -6,21 +6,21 @@ import path from "path";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (
-    !(
-      req.body.name &&
-      req.body.sex &&
-      req.body.age &&
-      req.body.diagnosis &&
-      req.body.prescription &&
-      req.body.date &&
-      req.body.doctor &&
-      req.body.accountant
-    )
-  ) {
-    res.status(400).json({ error: "Invalid request body" });
-    return;
-  }
+  // if (
+  //   !(
+  //     req.body.name &&
+  //     req.body.sex &&
+  //     req.body.age &&
+  //     req.body.diagnosis &&
+  //     req.body.prescription &&
+  //     req.body.date &&
+  //     req.body.doctor &&
+  //     req.body.accountant
+  //   )
+  // ) {
+  //   res.status(400).json({ error: "Invalid request body" });
+  //   return;
+  // }
   const supabase = createSupaClient();
   var recordId;
   try {
@@ -28,8 +28,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .from("Record")
       .insert({
         diagnosis: req.body.diagnosis,
-        doctor: req.body.doctor.id,
-        accountant: req.body.accountant.id,
+        doctor: req.body.doctor?.id,
+        accountant: req.body.accountant?.id,
         patient_name: req.body.name,
         patient_age: req.body.age,
         patient_sex: req.body.sex,

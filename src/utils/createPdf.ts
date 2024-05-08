@@ -83,7 +83,7 @@ export const createPrescriptionPdf = async (
   doc
     .font(prescriptionPdfConfig.khFont)
     .text(titleTextLine2, { align: "center" });
-  doc.moveDown(0.5);
+  doc.moveDown(1);
 
   // Add normal text
   doc.fontSize(normalFontSize);
@@ -94,7 +94,12 @@ export const createPrescriptionPdf = async (
   xPos = pageWidth / 2;
   doc
     .font(prescriptionPdfConfig.khFont)
-    .text(`${content.sexLabel}${sex}`, xPos)
+    .text(
+      `${content.sexLabel}${
+        content.sexValue[sex as keyof typeof content.sexValue]
+      }`,
+      xPos
+    )
     .moveUp(1);
   xPos = pageWidth * 0.75;
   doc
@@ -127,14 +132,16 @@ export const createPrescriptionPdf = async (
       underline: true,
     });
 
+  doc.moveDown(0.5);
+
   // prescription medicine title
   const columnWidth = [
-    (pageWidth - margin * 2) / 2,
-    (pageWidth - margin * 2) / 6,
-    (pageWidth - margin * 2) / 3,
+    ((pageWidth - margin * 2) * 4) / 10,
+    ((pageWidth - margin * 2) * 2) / 10,
+    ((pageWidth - margin * 2) * 4) / 10 + doc.page.margins.right,
   ];
   doc.fontSize(normalFontSize);
-  xPos = margin;
+  xPos = doc.page.margins.left;
   doc
     .font(prescriptionPdfConfig.khFont)
     .text(prescriptionLabel.medicine, xPos, doc.y, {
@@ -159,7 +166,7 @@ export const createPrescriptionPdf = async (
       underline: true,
       width: columnWidth[2],
     });
-  doc.moveDown(0.5);
+  doc.moveDown(1.5);
 
   // medicine
   prescription.forEach((item, index) => {
@@ -192,11 +199,11 @@ export const createPrescriptionPdf = async (
     .font(prescriptionPdfConfig.khFont)
     .text(formatDateKh(date), xPos, yPos, { align: "right" });
 
-  if (doctor.name_kh) {
+  if (doctor?.name_kh) {
     yPos = doc.page.height - doc.page.margins.bottom - 48;
     xPos = margin;
     doc
-      .fillColor("#5e5eff")
+      .fillColor("#2f2fc2")
       .font(prescriptionPdfConfig.titleFont)
       .fontSize(subTitleFontSize)
       .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
@@ -204,11 +211,20 @@ export const createPrescriptionPdf = async (
       });
   }
   // footer
-  yPos = doc.page.height - doc.page.margins.bottom - 16;
-  xPos = margin;
-  doc.fontSize(normalFontSize);
+  yPos = doc.page.height - doc.page.margins.bottom - 32;
+  xPos = 22;
+  doc.fontSize(9);
   doc.fillColor("black");
   doc.font(prescriptionPdfConfig.khFont).text(content.bottomText, xPos, yPos);
+  doc.moveDown(0.2);
+  doc
+    .moveTo(xPos, doc.y)
+    .lineTo(pageWidth - xPos, doc.y)
+    .stroke();
+  doc.moveDown(0.2);
+  doc
+    .font(prescriptionPdfConfig.khFont)
+    .text(content.address, xPos, doc.y, { width: pageWidth });
   return;
 };
 

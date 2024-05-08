@@ -204,7 +204,10 @@ const MedicalForm: React.FC<FormProps> = ({
       setError({ ...error, general: "" });
     } catch (error) {
       console.log(error);
-      setError((prev: any) => ({ ...prev, general: "Something went wrong!" }));
+      setError((prev: any) => ({
+        ...prev,
+        general: "Something went wrong! Please Try Again.",
+      }));
     } finally {
       setLoading(false);
     }
