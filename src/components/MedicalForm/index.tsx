@@ -34,6 +34,7 @@ interface PersonalInfo {
   medicine: string;
   amount: number;
   usage: string;
+  date: string;
 }
 
 interface Prescription {
@@ -53,6 +54,7 @@ interface ErrorType {
   medicine: string;
   amount: string;
   usage: string;
+  date: string;
 }
 
 interface EmployeeInfo {
@@ -85,6 +87,7 @@ const MedicalForm: React.FC<FormProps> = ({
     medicine: "",
     amount: 0,
     usage: "",
+    date: new Date().toISOString().split("T")[0],
   });
   const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo>({
     doctor: "",
@@ -100,6 +103,7 @@ const MedicalForm: React.FC<FormProps> = ({
     medicine: "",
     amount: "",
     usage: "",
+    date: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -158,6 +162,7 @@ const MedicalForm: React.FC<FormProps> = ({
   };
 
   const onClickFormCancel = () => {
+    const selectedDate = formData.date;
     setFormData({
       name: "",
       sex: "",
@@ -166,6 +171,7 @@ const MedicalForm: React.FC<FormProps> = ({
       medicine: "",
       amount: 0,
       usage: "",
+      date: selectedDate,
     });
     setPrescriptions([]);
   };
@@ -173,8 +179,6 @@ const MedicalForm: React.FC<FormProps> = ({
   const onClickSubmit = async () => {
     try {
       setLoading(true);
-      const today = new Date();
-      const todayDate = today.toISOString().split("T")[0];
       const response = await axios.post(
         "/api/pdf",
         {
@@ -183,7 +187,7 @@ const MedicalForm: React.FC<FormProps> = ({
           age: formData.age,
           diagnosis: formData.diagnosis,
           prescription: prescriptions,
-          date: todayDate,
+          date: formData.date,
           doctor: doctorList.find((item) => item.name === employeeInfo.doctor),
           accountant: accountantList.find(
             (item) => item.name === employeeInfo.accountant
@@ -224,10 +228,20 @@ const MedicalForm: React.FC<FormProps> = ({
                   <Alert severity="error">{error.general}</Alert>
                 </Grid>
               )}
-              <Grid item xs={8}>
-                <h2>Form</h2>
+              <Grid item xs={4}>
+                <TextField
+                  id="date-field"
+                  label={formLabel.date}
+                  fullWidth
+                  onChange={(e) => onFormDataChange(e)}
+                  name="date"
+                  value={formData.date}
+                  error={!!error.date}
+                  type="date"
+                  InputLabelProps={{ shrink: true }}
+                />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
                   options={doctorList.map((item) => item.name)}
@@ -245,7 +259,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
                   options={accountantList.map((item) => item.name)}
@@ -262,6 +276,9 @@ const MedicalForm: React.FC<FormProps> = ({
                     <TextField {...params} label={formLabel.accountant} />
                   )}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <h2>Form</h2>
               </Grid>
               <Grid item xs={6}>
                 <TextField

@@ -20,6 +20,7 @@ export const formLabelEn = {
   totalPrice: "Total Price",
   submit: "Submit",
   clear: "Clear",
+  date: "Date",
 };
 export const formLabelKh = {
   name: "ឈ្មោះ",
@@ -43,4 +44,5 @@ export const formLabelKh = {
   totalPrice: "តម្លៃសរុប",
   submit: "ដាក់បញ្ចូល",
   clear: "សំអាត",
+  date: "កាលបរិច្ឆេទ",
 };

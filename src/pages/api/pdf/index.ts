@@ -73,6 +73,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     date: req.body.date,
     invoiceNo: recordId,
     prescription: req.body.prescription,
+    accountant: req.body.accountant,
   });
 
   // doc.font("Khmer").text("ឈ្មោះ").moveDown(0.5);

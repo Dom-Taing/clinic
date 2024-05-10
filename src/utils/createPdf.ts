@@ -5,6 +5,7 @@ import {
   prescriptionPdfConfigKh,
 } from "./config";
 import path from "path";
+import fs from "fs";
 
 interface Prescription {
   medicine: string;
@@ -14,6 +15,7 @@ interface Prescription {
   usage: string;
 }
 interface User {
+  name: string;
   name_kh: string;
 }
 interface Prescriptiondata {
@@ -33,6 +35,7 @@ interface InvoiceData {
   age: number;
   date: string;
   prescription: Prescription[];
+  accountant: User;
 }
 
 // function addFonts(doc) {
@@ -43,6 +46,13 @@ interface InvoiceData {
 function formatDateKh(date: string) {
   const [year, month, day] = date.split("-");
   return `ថ្ងៃទី ${day} ខែ ${month} ឆ្នាំ ${year}`;
+}
+
+function getFileName(name: string) {
+  if (!name) return;
+  const lowercaseName = name.toLowerCase();
+  const fileName = lowercaseName.replace(/\s+/g, "_");
+  return fileName;
 }
 
 export const createPrescriptionPdf = async (
@@ -199,6 +209,22 @@ export const createPrescriptionPdf = async (
     .font(prescriptionPdfConfig.khFont)
     .text(formatDateKh(date), xPos, yPos, { align: "right" });
 
+  const signatureWidth = 120;
+  if (
+    fs.existsSync(path.resolve(`./public/${getFileName(doctor?.name)}.png`))
+  ) {
+    xPos = doc.page.width - margin - signatureWidth;
+    doc.moveDown(0.5);
+    doc.image(
+      path.resolve(`./public/${getFileName(doctor?.name)}.png`),
+      xPos,
+      doc.y,
+      {
+        width: signatureWidth,
+      }
+    );
+  }
+
   if (doctor?.name_kh) {
     yPos = doc.page.height - doc.page.margins.bottom - 48;
     xPos = margin;
@@ -231,7 +257,7 @@ export const createPrescriptionPdf = async (
 export const createInvoicePdf = async (
   doc: any,
   language: "kh" | "en",
-  { name, invoiceNo, sex, age, date, prescription }: InvoiceData
+  { name, invoiceNo, sex, age, date, prescription, accountant }: InvoiceData
 ) => {
   const { content, ...invoicePdfConfig } =
     language === "kh" ? invoicePdfConfigKh : invoicePdfConfigEn;
@@ -399,13 +425,39 @@ export const createInvoicePdf = async (
     .stroke();
 
   // signature
+  const signatureWidth = 150;
+  const signatureHeight = 50;
+  if (
+    fs.existsSync(path.resolve(`./public/${getFileName(accountant?.name)}.png`))
+  ) {
+    xPos = doc.page.width - margin - signatureWidth;
+    yPos = doc.page.height - 100 - signatureHeight;
+    doc.image(
+      path.resolve(`./public/${getFileName(accountant?.name)}.png`),
+      xPos,
+      yPos,
+      {
+        fit: [signatureWidth, 50],
+        valign: "bottom",
+        align: "center",
+      }
+    );
+  }
+
   yPos = doc.page.height - 100;
-  xPos = doc.page.width - margin - 200;
+  xPos = doc.page.width - margin - signatureWidth;
   doc
     .moveTo(xPos, yPos)
-    .lineTo(xPos + 200, yPos)
+    .lineTo(xPos + signatureWidth, yPos)
     .stroke();
-  doc.text(content.SignatureLabel, xPos, yPos, { align: "center", width: 200 });
+  doc.text(`${content.SignatureLabelKh} (${accountant?.name})`, xPos, yPos, {
+    align: "center",
+    width: signatureWidth,
+  });
+  doc.text(content.SignatureLabelEn, {
+    align: "center",
+    width: signatureWidth,
+  });
 
   // footer
   yPos = doc.page.height - margin - 32;
