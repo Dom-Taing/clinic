@@ -120,7 +120,12 @@ export const createPrescriptionPdf = async (
   // second row
   doc
     .font(prescriptionPdfConfig.khFont)
-    .text(`${content.diagnosisLabel}${diagnosis}`, margin);
+    .text(`${content.diagnosisLabel}`, margin, doc.y, {
+      continued: !!diagnosis,
+    })
+    .font(prescriptionPdfConfig.enFont)
+    .text(`${diagnosis}`);
+  doc.moveDown(0.25);
 
   // Draw line
   xPos = doc.page.margins.left;
@@ -203,7 +208,7 @@ export const createPrescriptionPdf = async (
     doc.moveDown(1);
   });
   // date
-  yPos = doc.page.height - 150;
+  yPos = doc.page.height - 140;
   xPos = margin;
   doc
     .font(prescriptionPdfConfig.khFont)
@@ -213,14 +218,15 @@ export const createPrescriptionPdf = async (
   if (
     fs.existsSync(path.resolve(`./public/${getFileName(doctor?.name)}.png`))
   ) {
-    xPos = doc.page.width - margin - signatureWidth;
+    xPos = doc.page.width - 22 - signatureWidth;
     doc.moveDown(0.5);
     doc.image(
       path.resolve(`./public/${getFileName(doctor?.name)}.png`),
       xPos,
       doc.y,
       {
-        width: signatureWidth,
+        fit: [signatureWidth, 50],
+        valign: "center",
       }
     );
   }
@@ -231,7 +237,7 @@ export const createPrescriptionPdf = async (
     doc
       .fillColor("#2f2fc2")
       .font(prescriptionPdfConfig.titleFont)
-      .fontSize(subTitleFontSize)
+      .fontSize(titleFontSize)
       .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
         align: "right",
       });
