@@ -235,9 +235,9 @@ export const createPrescriptionPdf = async (
     yPos = doc.page.height - doc.page.margins.bottom - 48;
     xPos = margin;
     doc
-      .fillColor("#2f2fc2")
+      .fillColor("#5287BF")
       .font(prescriptionPdfConfig.titleFont)
-      .fontSize(titleFontSize)
+      .fontSize(titleFontSize + 2)
       .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
         align: "right",
       });
@@ -366,14 +366,16 @@ export const createInvoicePdf = async (
   invoiceTable.map((med, index) => {
     let yPos = doc.y;
     doc
+      .font(invoicePdfConfig.enFont)
       .text(index + 1, cellXPos[0], yPos, {
         width: cellWidth[0],
         align: "center",
       })
-      .text(med.medicine, cellXPos[1], yPos, {
+      .text(med.medicine, cellXPos[1], yPos + 2, {
         width: cellWidth[1],
         align: "left",
       })
+      .font(invoicePdfConfig.khFont)
       .text(med.amount, cellXPos[2], yPos, {
         width: cellWidth[2],
         align: "center",
@@ -388,6 +390,8 @@ export const createInvoicePdf = async (
       });
     cellYPos.push(doc.y);
   });
+
+  doc.font(invoicePdfConfig.khFont);
   doc
     .moveTo(cellXPos[0], doc.y)
     .lineTo(cellXPos[4] + cellWidth[4], doc.y)
