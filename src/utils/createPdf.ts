@@ -353,7 +353,17 @@ export const createInvoicePdf = async (
     .stroke();
   cellYPos.push(doc.y);
 
-  prescription.map((med, index) => {
+  let invoiceTable: Prescription[] = [
+    {
+      medicine: "Consultation",
+      amount: 1,
+      unitPrice: 20000,
+      totalPrice: 20000,
+      usage: "",
+    },
+    ...prescription,
+  ];
+  invoiceTable.map((med, index) => {
     let yPos = doc.y;
     doc
       .text(index + 1, cellXPos[0], yPos, {
@@ -372,7 +382,7 @@ export const createInvoicePdf = async (
         width: cellWidth[3],
         align: "center",
       })
-      .text(med.totalPrice * med.amount + " ៛", cellXPos[4], yPos, {
+      .text(med.totalPrice + " ៛", cellXPos[4], yPos, {
         width: cellWidth[4],
         align: "center",
       });
@@ -383,7 +393,7 @@ export const createInvoicePdf = async (
     .lineTo(cellXPos[4] + cellWidth[4], doc.y)
     .stroke();
 
-  const totalAmount = prescription.reduce((acc: number, item: Prescription) => {
+  const totalAmount = invoiceTable.reduce((acc: number, item: Prescription) => {
     return acc + item.amount * item.unitPrice;
   }, 0);
   doc
