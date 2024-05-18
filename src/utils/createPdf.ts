@@ -219,7 +219,7 @@ export const createPrescriptionPdf = async (
     fs.existsSync(path.resolve(`./public/${getFileName(doctor?.name)}.png`))
   ) {
     xPos = doc.page.width - 22 - signatureWidth;
-    doc.moveDown(0.5);
+    yPos = doc.y;
     doc.image(
       path.resolve(`./public/${getFileName(doctor?.name)}.png`),
       xPos,
