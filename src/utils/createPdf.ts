@@ -227,6 +227,7 @@ export const createPrescriptionPdf = async (
       {
         fit: [signatureWidth, 50],
         valign: "center",
+        align: "center",
       }
     );
   }
@@ -240,6 +241,7 @@ export const createPrescriptionPdf = async (
       .fontSize(titleFontSize + 2)
       .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
         align: "right",
+        width: pageWidth - margin - 22,
       });
   }
   // footer
