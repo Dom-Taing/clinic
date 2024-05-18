@@ -310,7 +310,13 @@ export const createInvoicePdf = async (
   yPos = doc.y;
   doc
     .font(invoicePdfConfig.khFont)
-    .text(`${content.genderLabel}${sex}`, xPos, yPos)
+    .text(
+      `${content.genderLabel}${
+        content.sexValue[sex as keyof typeof content.sexValue]
+      }`,
+      xPos,
+      yPos
+    )
     .moveUp(1);
   xPos = pageWidth * 0.375;
   doc

@@ -43,6 +43,10 @@ export const invoicePdfConfigEn = {
     nameLabel: "Name: ",
     invoiceLabel: "Invoice:",
     genderLabel: "Gender: ",
+    sexValue: {
+      male: "Male",
+      female: "Female",
+    },
     ageLabel: "Age: ",
     dateLabel: "Date: ",
     prescriptionLabel: {
@@ -107,6 +111,10 @@ export const invoicePdfConfigKh = {
     nameLabel: "ឈ្មោះ / Name: ",
     invoiceLabel: "លេខរៀងវិក្ក័យបត្រ:",
     genderLabel: "ភេទ / Gender: ",
+    sexValue: {
+      male: "Male",
+      female: "Female",
+    },
     ageLabel: "អាយុ / Age: ",
     dateLabel: "ថ្ងៃចេញវិក្ក័យបត្រ: ",
     prescriptionLabel: {
