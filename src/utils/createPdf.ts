@@ -279,7 +279,33 @@ export const createInvoicePdf = async (
   var xPos = 0;
   var yPos = 0;
 
+  // logo
+  xPos = margin + 7;
+  yPos = 8;
+  doc.image(path.resolve("./public/logo.jpg"), xPos, yPos, {
+    width: 60,
+  });
+  const logoText = content.logoText.split("\n");
+  xPos = margin;
+  yPos = 68;
+  doc
+    .fontSize(6)
+    .font(invoicePdfConfig.fancyKhFont)
+    .text(logoText[0], xPos, yPos, { width: 80, align: "center" })
+    .moveDown(0.25)
+    .fontSize(6)
+    .font(invoicePdfConfig.enFont)
+    .text(logoText[1], { width: 80, align: "center" });
+
+  xPos = pageWidth - margin - 110;
+  yPos = 8;
+  doc
+    .fontSize(8)
+    .font(invoicePdfConfig.fancyKhFont)
+    .text(content.header, xPos, yPos, { align: "center" });
+
   // title
+  doc.text("", margin, margin);
   doc.moveDown(2);
   doc.fontSize(titleFontSize);
   doc.font(invoicePdfConfig.khFont).text(titleTextLine1, { align: "center" });
@@ -374,11 +400,12 @@ export const createInvoicePdf = async (
   invoiceTable.map((med, index) => {
     let yPos = doc.y;
     doc
-      .font(invoicePdfConfig.enFont)
+      .font(invoicePdfConfig.khFont)
       .text(index + 1, cellXPos[0], yPos, {
         width: cellWidth[0],
         align: "center",
       })
+      .font(invoicePdfConfig.enFont)
       .text(med.medicine, cellXPos[1], yPos + 2, {
         width: cellWidth[1],
         align: "left",
@@ -491,13 +518,6 @@ export const createInvoicePdf = async (
   yPos = doc.page.height - margin - 32;
   xPos = margin;
   doc.text(content.footer, xPos, yPos, { align: "center" });
-
-  // logo
-  xPos = margin;
-  yPos = 8;
-  doc.image(path.resolve("./public/logo.jpg"), xPos, yPos, {
-    width: 60,
-  });
   return;
 };
 

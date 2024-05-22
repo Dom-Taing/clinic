@@ -35,6 +35,7 @@ export const invoicePdfConfigEn = {
   spacing: 8,
   khFont: "Khmer",
   enFont: "Helvetica",
+  fancyKhFont: "Fancy-Khmer",
   titleFontSize: 16,
   normalFontSize: 12,
   content: {
@@ -59,6 +60,8 @@ export const invoicePdfConfigEn = {
       ],
       totalLabel: "Total",
     },
+    header: "",
+    logoText: "មន្ទីរពហុព្យាបាល សុខសាន្ត\nSOK SAN POLYCLINIC",
     SignatureLabelEn: "Accountant Signature",
     SignatureLabelKh: "ហត្ថលេខា បេឡា",
     footer: "",
@@ -103,6 +106,7 @@ export const invoicePdfConfigKh = {
   spacing: 8,
   khFont: "Khmer",
   enFont: "Helvetica",
+  fancyKhFont: "Fancy-Khmer",
   titleFontSize: 14,
   normalFontSize: 8,
   content: {
@@ -129,6 +133,8 @@ export const invoicePdfConfigKh = {
     },
     SignatureLabelEn: "Accountant Signature",
     SignatureLabelKh: "ហត្ថលេខា បេឡា",
+    header: "ព្រះរាជាណាចក្រកម្ពុជា\nជាតិ សាសនា ព្រះមហាក្សត្រ",
+    logoText: "មន្ទីរពហុព្យាបាល សុខសាន្ត\nSOKSAN POLYCLINIC",
     footer:
       "ផ្ទះលេខ ៧៦៨, ផ្លូវជាតិលេខ ៥ គីឡូម៉ែត្រលេខ ៦, ខណ្ឌ ឬស្សីកែវ រាជធានីភ្នំពេញ (ទល់មុខរោងចក្រ កូកាកូឡា)\nលេខទូរស័ព្ទ 010 89 22 89, 017 89 22 89, 012 99 37 22",
   },
