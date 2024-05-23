@@ -152,6 +152,7 @@ export const createPrescriptionPdf = async (
     .text(prescriptionLabel.title, xPos, doc.y, {
       align: "center",
       underline: true,
+      width: pageWidth - 22 - margin * 2,
     });
   doc.moveDown(0.5);
 
@@ -369,7 +370,7 @@ export const createInvoicePdf = async (
 
   // prescription
   const { prescriptionLabel } = content;
-  const cellWidth = [33, 169, 33, 66, 70];
+  const cellWidth = [33, 152, 50, 66, 70];
   const currX = margin;
   const cellYPos = [doc.y];
   const cellXPos = cellWidth.map((width, index) => {
@@ -434,6 +435,7 @@ export const createInvoicePdf = async (
         width: cellWidth[4],
         align: "center",
       });
+    doc.moveDown(0.125);
     cellYPos.push(doc.y);
   });
 
@@ -447,7 +449,7 @@ export const createInvoicePdf = async (
     return acc + item.amount * item.unitPrice;
   }, 0);
   doc
-    .fontSize(8)
+    .fontSize(normalFontSize)
     .text(prescriptionLabel.totalLabel, cellXPos[2], doc.y, {
       align: "center",
       width: cellWidth[2] + cellWidth[3],
@@ -528,7 +530,7 @@ export const createInvoicePdf = async (
   // footer
   yPos = doc.page.height - margin - 32;
   xPos = margin;
-  doc.text(content.footer, xPos, yPos, { align: "center" });
+  doc.fontSize(8).text(content.footer, xPos, yPos, { align: "center" });
   return;
 };
 

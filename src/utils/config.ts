@@ -110,7 +110,7 @@ export const invoicePdfConfigKh = {
   enFont: "Helvetica",
   fancyKhFont: "Fancy-Khmer",
   titleFontSize: 14,
-  normalFontSize: 8,
+  normalFontSize: 10,
   content: {
     titleTextLine1: "វិក្ក័យបត្រ / Invoice",
     titleTextLine2: "ឈ្មោះ / Name:",
