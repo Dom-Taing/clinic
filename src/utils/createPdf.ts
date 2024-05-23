@@ -62,8 +62,14 @@ export const createPrescriptionPdf = async (
 ) => {
   const { content, ...prescriptionPdfConfig } =
     language === "kh" ? prescriptionPdfConfigKh : prescriptionPdfConfigEn;
-  const { margin, spacing, titleFontSize, normalFontSize, subTitleFontSize } =
-    prescriptionPdfConfig;
+  const {
+    margin,
+    spacing,
+    titleFontSize,
+    normalFontSize,
+    subTitleFontSize,
+    smallFontSize,
+  } = prescriptionPdfConfig;
 
   // Define the title text
   var titleTextLine1 = content.titleTextLine1;
@@ -93,7 +99,7 @@ export const createPrescriptionPdf = async (
   doc
     .font(prescriptionPdfConfig.khFont)
     .text(titleTextLine2, { align: "center" });
-  doc.moveDown(1);
+  doc.moveDown(0.5);
 
   // Add normal text
   doc.fontSize(normalFontSize);
@@ -124,8 +130,8 @@ export const createPrescriptionPdf = async (
       continued: !!diagnosis,
     })
     .font(prescriptionPdfConfig.enFont)
-    .text(`${diagnosis}`);
-  doc.moveDown(0.25);
+    .text(`${diagnosis}`, doc.x, doc.y + 2);
+  doc.moveDown(0.5);
 
   // Draw line
   xPos = doc.page.margins.left;
@@ -134,6 +140,7 @@ export const createPrescriptionPdf = async (
     .moveTo(xPos, yPos)
     .lineTo(pageWidth - xPos, yPos)
     .stroke();
+  doc.moveDown(0.5);
 
   // prescription section
   const { prescriptionLabel } = content;
@@ -146,7 +153,6 @@ export const createPrescriptionPdf = async (
       align: "center",
       underline: true,
     });
-
   doc.moveDown(0.5);
 
   // prescription medicine title
@@ -177,9 +183,9 @@ export const createPrescriptionPdf = async (
   doc
     .font(prescriptionPdfConfig.khFont)
     .text(prescriptionLabel.usage, xPos, doc.y, {
-      align: "left",
+      align: "center",
       underline: true,
-      width: columnWidth[2],
+      width: columnWidth[2] - doc.page.margins.right,
     });
   doc.moveDown(1.5);
 
@@ -187,6 +193,7 @@ export const createPrescriptionPdf = async (
   prescription.forEach((item, index) => {
     let startX = margin;
     let startY = doc.y;
+    doc.fontSize(smallFontSize);
     doc
       .font(prescriptionPdfConfig.enFont)
       .text(`${index + 1}-`, 0, startY, { align: "right", width: margin });
@@ -209,15 +216,19 @@ export const createPrescriptionPdf = async (
   });
   // date
   yPos = doc.page.height - 140;
-  xPos = margin;
+  xPos = 0;
   doc
+    .fontSize(normalFontSize)
     .font(prescriptionPdfConfig.khFont)
-    .text(formatDateKh(date), xPos, yPos, { align: "right" });
+    .text(formatDateKh(date), xPos, yPos, {
+      align: "right",
+      width: pageWidth - 22,
+    });
 
-  const signatureWidth = 120;
   if (
     fs.existsSync(path.resolve(`./public/${getFileName(doctor?.name)}.png`))
   ) {
+    const signatureWidth = 120;
     xPos = doc.page.width - 22 - signatureWidth;
     yPos = doc.y;
     doc.image(

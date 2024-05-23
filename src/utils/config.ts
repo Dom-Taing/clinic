@@ -7,6 +7,7 @@ export const prescriptionPdfConfigEn = {
   titleFontSize: 14,
   normalFontSize: 12,
   subTitleFontSize: 14,
+  smallFontSize: 10,
   content: {
     titleTextLine1: "First Line",
     titleTextLine2: "Second Line",
@@ -74,9 +75,10 @@ export const prescriptionPdfConfigKh = {
   khFont: "Khmer",
   enFont: "Helvetica",
   titleFont: "Fancy-Khmer",
-  titleFontSize: 14,
-  normalFontSize: 10,
-  subTitleFontSize: 12,
+  titleFontSize: 16,
+  normalFontSize: 12,
+  subTitleFontSize: 14,
+  smallFontSize: 10,
   content: {
     titleTextLine1: "មន្ទីរពហុព្យាបាល សុខសាន្ត",
     titleTextLine2: "SOK SAN POLYCLINIC",
@@ -87,7 +89,7 @@ export const prescriptionPdfConfigKh = {
       female: "ស្រី",
     },
     ageLabel: "អាយុ:  ",
-    diagnosisLabel: "រោគវិនិច្ឆ័យ:  ",
+    diagnosisLabel: "រោគវិនិច្ឆ័យ:   ",
     prescriptionLabel: {
       title: "វេជ្ជបញ្ជា",
       medicine: "ឈ្មោះថ្នាំ",
