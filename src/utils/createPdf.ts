@@ -120,7 +120,9 @@ export const createPrescriptionPdf = async (
   xPos = pageWidth * 0.75;
   doc
     .font(prescriptionPdfConfig.khFont)
-    .text(`${content.ageLabel}${age} ឆ្នាំ`, xPos);
+    .text(`${content.ageLabel}${age} ឆ្នាំ`, xPos, doc.y, {
+      width: pageWidth / 4,
+    });
 
   doc.moveDown(0.5);
   // second row
