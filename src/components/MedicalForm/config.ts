@@ -61,4 +61,4 @@ export const formLabelKh = {
   date: "កាលបរិច្ឆេទ",
 };
 
-export const unitOptions = ["គ្រាប់", "កញ្ចប់"];
+export const unitOptions = ["គ្រាប់", "កញ្ចប់", "អំពូល"];

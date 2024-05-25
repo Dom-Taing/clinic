@@ -14,6 +14,7 @@ interface Prescription {
   unitPrice: number;
   totalPrice: number;
   usage: string;
+  unit: string;
 }
 interface User {
   name: string;
@@ -212,7 +213,7 @@ export const createPrescriptionPdf = async (
     startX += columnWidth[0];
     doc
       .font(prescriptionPdfConfig.khFont)
-      .text(`${item.amount.toString()} គ្រាប់`, startX, startY, {
+      .text(`${item.amount.toString()} ${item.unit}`, startX, startY, {
         align: "left",
         width: columnWidth[1],
       });
@@ -414,6 +415,7 @@ export const createInvoicePdf = async (
       unitPrice: 20000,
       totalPrice: 20000,
       usage: "",
+      unit: "",
     },
     ...prescription,
   ];
