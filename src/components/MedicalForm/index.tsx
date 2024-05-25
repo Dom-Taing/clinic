@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { formLabelEn, formLabelKh } from "./config";
+import { formLabelEn, formLabelKh, unitOptions } from "./config";
 import axios from "axios";
 import DataTable from "../DataTable";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -33,16 +33,20 @@ interface PersonalInfo {
   diagnosis: string;
   medicine: string;
   amount: number;
+  unit: string;
   usage: string;
+  addInto: string;
   date: string;
 }
 
 interface Prescription {
   medicine: string;
   amount: number;
+  unit: string;
   unitPrice: number;
   totalPrice: number;
   usage: string;
+  addInto: string;
 }
 
 interface ErrorType {
@@ -86,7 +90,9 @@ const MedicalForm: React.FC<FormProps> = ({
     diagnosis: "",
     medicine: "",
     amount: 0,
+    unit: "",
     usage: "",
+    addInto: "both",
     date: new Date().toISOString().split("T")[0],
   });
   const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo>({
@@ -144,7 +150,9 @@ const MedicalForm: React.FC<FormProps> = ({
       {
         medicine: formData.medicine,
         amount: formData.amount,
+        unit: formData.unit,
         usage: formData.usage,
+        addInto: formData.addInto,
         unitPrice: unitPrice,
         totalPrice: totalPrice,
       },
@@ -153,7 +161,9 @@ const MedicalForm: React.FC<FormProps> = ({
       ...formData,
       medicine: "",
       amount: 0,
+      unit: "",
       usage: "",
+      addInto: "both",
     });
   };
 
@@ -170,7 +180,9 @@ const MedicalForm: React.FC<FormProps> = ({
       diagnosis: "",
       medicine: "",
       amount: 0,
+      unit: "",
       usage: "",
+      addInto: "both",
       date: selectedDate,
     });
     setPrescriptions([]);
@@ -315,7 +327,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   label={formLabel.age}
                   fullWidth
                   name="age"
-                  value={formData.age === 0 ? null : formData.age}
+                  value={formData.age === 0 ? "" : formData.age}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value;
                     e.target.value = value.replace(/^0+/, "") || "";
@@ -337,6 +349,10 @@ const MedicalForm: React.FC<FormProps> = ({
                     <TextField {...params} label={formLabel.diagnosis} />
                   )}
                 />
+              </Grid>
+              {/* Medicine */}
+              <Grid item xs={12}>
+                <h3>Medicine</h3>
               </Grid>
               <Grid item xs={6}>
                 <Autocomplete
@@ -360,13 +376,13 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3}>
                 <TextField
                   type="number"
                   label={formLabel.amount}
                   fullWidth
                   name="amount"
-                  value={formData.amount === 0 ? null : formData.amount}
+                  value={formData.amount === 0 ? "" : formData.amount}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value;
                     e.target.value = value.replace(/^0+/, "") || "";
@@ -375,6 +391,21 @@ const MedicalForm: React.FC<FormProps> = ({
                 />
               </Grid>
               <Grid item xs={3}>
+                <Autocomplete
+                  disablePortal
+                  options={unitOptions}
+                  freeSolo
+                  value={formData.unit}
+                  onChange={(e, newValue) => {
+                    onFormDataChange(e, "unit", newValue || "");
+                  }}
+                  autoSelect
+                  renderInput={(params) => (
+                    <TextField {...params} label={formLabel.unit} />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
                   options={usageList.map((item) => item.usage)}
@@ -389,9 +420,29 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label={formLabel.addInto}
+                  fullWidth
+                  onChange={(e) => onFormDataChange(e)}
+                  select
+                  name="addInto"
+                  value={formData.addInto}
+                >
+                  {Object.keys(formLabel.addIntoOptions).map((key) => (
+                    <MenuItem key={key} value={key}>
+                      {
+                        formLabel.addIntoOptions[
+                          key as keyof typeof formLabel.addIntoOptions
+                        ]
+                      }
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
               <Grid
                 item
-                xs={1}
+                xs={4}
                 style={{ display: "flex", alignItems: "center" }}
               >
                 <Button
@@ -399,6 +450,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   color="primary"
                   size="large"
                   onClick={onClickAddMedicine}
+                  fullWidth
                 >
                   {formLabel.addButton}
                 </Button>
@@ -412,12 +464,18 @@ const MedicalForm: React.FC<FormProps> = ({
                     { display: formLabel.medicine, key: "medicine" },
                     { display: formLabel.amount, key: "amount" },
                     { display: formLabel.usage, key: "usage" },
+                    { display: formLabel.addInto, key: "addInto" },
                     { display: formLabel.unitPrice, key: "unitPrice" },
                     { display: formLabel.totalPrice, key: "totalPrice" },
                     { display: "action", key: "action" },
                   ]}
                   data={prescriptions.map((item, index) => ({
                     ...item,
+                    amount: `${item.amount} ${item.unit || ""}`,
+                    addInto:
+                      formLabel.addIntoOptions[
+                        item.addInto as keyof typeof formLabel.addIntoOptions
+                      ],
                     action: (
                       <IconButton
                         aria-label="delete"

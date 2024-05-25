@@ -6,7 +6,14 @@ export const formLabelEn = {
   diagnosis: "Diagnosis",
   medicine: "Medicine",
   amount: "Amount",
+  unit: "Unit",
   usage: "Usage",
+  addInto: "Add Into",
+  addIntoOptions: {
+    prescription: "Prescription",
+    invoice: "Invoice",
+    both: "Both",
+  },
   namePlaceholder: "Enter Patient Name",
   sexOptions: {
     male: "Male",
@@ -30,7 +37,14 @@ export const formLabelKh = {
   diagnosis: "រោគវិនិច្ឆ័យ",
   medicine: "ឈ្មោះថ្នាំ",
   amount: "ចំនួន",
+  unit: "ឯកតា",
   usage: "ការប្រើប្រាស់",
+  addInto: "បញ្ចូលទៅក្នុង",
+  addIntoOptions: {
+    prescription: "វេជ្ជបញ្ជា",
+    invoice: "វិក្កយបត្រ",
+    both: "ទាំងពីរ",
+  },
   namePlaceholder: "បញ្ចូលឈ្មោះអ្នកជំងឺ",
   sexOptions: {
     male: "ប្រុស",
@@ -46,3 +60,5 @@ export const formLabelKh = {
   clear: "សំអាត",
   date: "កាលបរិច្ឆេទ",
 };
+
+export const unitOptions = ["គ្រាប់", "កញ្ចប់"];

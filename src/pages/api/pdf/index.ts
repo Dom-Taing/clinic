@@ -56,7 +56,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   doc.registerFont("Khmer", path.resolve("./public/Khmer-Regular.ttf"));
   doc.registerFont("Fancy-Khmer", path.resolve("./public/Moul-Regular.ttf"));
   await createPrescriptionPdf(doc, "kh", {
-    prescription: req.body.prescription,
+    prescription: req.body.prescription.filter(
+      (prescription: any) =>
+        prescription.addInto === "prescription" ||
+        prescription.addInto === "both"
+    ),
     name: req.body.name,
     sex: req.body.sex,
     age: req.body.age,
@@ -72,7 +76,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     age: req.body.age,
     date: req.body.date,
     invoiceNo: recordId,
-    prescription: req.body.prescription,
+    prescription: req.body.prescription.filter(
+      (prescription: any) =>
+        prescription.addInto === "invoice" || prescription.addInto === "both"
+    ),
     accountant: req.body.accountant,
   });
 

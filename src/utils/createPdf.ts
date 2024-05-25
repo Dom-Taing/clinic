@@ -1,4 +1,5 @@
 import {
+  Month,
   invoicePdfConfigEn,
   invoicePdfConfigKh,
   prescriptionPdfConfigEn,
@@ -46,6 +47,11 @@ interface InvoiceData {
 function formatDateKh(date: string) {
   const [year, month, day] = date.split("-");
   return `ថ្ងៃទី ${day} ខែ ${month} ឆ្នាំ ${year}`;
+}
+
+function formatDateEn(date: string) {
+  const [year, month, day] = date.split("-");
+  return `${day}-${Month[parseInt(month)]}-${year}`;
 }
 
 function getFileName(name: string) {
@@ -367,7 +373,7 @@ export const createInvoicePdf = async (
   xPos = pageWidth * 0.625;
   doc
     .font(invoicePdfConfig.khFont)
-    .text(`${content.dateLabel}${date}`, xPos, doc.y);
+    .text(`${content.dateLabel}${formatDateEn(date)}`, xPos, doc.y);
   doc.moveDown(1);
 
   // prescription
