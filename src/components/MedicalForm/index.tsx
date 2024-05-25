@@ -315,10 +315,10 @@ const MedicalForm: React.FC<FormProps> = ({
                   label={formLabel.age}
                   fullWidth
                   name="age"
-                  value={formData.age}
+                  value={formData.age === 0 ? null : formData.age}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value;
-                    e.target.value = value.replace(/^0+/, "") || "0";
+                    e.target.value = value.replace(/^0+/, "") || "";
                     onFormDataChange(e);
                   }}
                 />
@@ -366,10 +366,10 @@ const MedicalForm: React.FC<FormProps> = ({
                   label={formLabel.amount}
                   fullWidth
                   name="amount"
-                  value={formData.amount}
+                  value={formData.amount === 0 ? null : formData.amount}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value;
-                    e.target.value = value.replace(/^0+/, "") || "0";
+                    e.target.value = value.replace(/^0+/, "") || "";
                     onFormDataChange(e);
                   }}
                 />
