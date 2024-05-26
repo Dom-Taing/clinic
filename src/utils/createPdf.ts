@@ -218,10 +218,12 @@ export const createPrescriptionPdf = async (
         width: columnWidth[1],
       });
     startX += columnWidth[1];
-    doc.font(prescriptionPdfConfig.khFont).text(item.usage, startX, startY, {
-      align: "left",
-      width: columnWidth[2],
-    });
+    doc
+      .font(prescriptionPdfConfig.khFont)
+      .text(item.usage || " ", startX, startY, {
+        align: "left",
+        width: columnWidth[2],
+      });
     doc.moveDown(1);
   });
   // date
