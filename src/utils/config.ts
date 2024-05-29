@@ -143,6 +143,7 @@ export const invoicePdfConfigKh = {
 };
 
 export const Month = [
+  "",
   "Jan",
   "Feb",
   "Mar",
