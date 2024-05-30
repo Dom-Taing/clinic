@@ -240,7 +240,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   <Alert severity="error">{error.general}</Alert>
                 </Grid>
               )}
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <TextField
                   id="date-field"
                   label={formLabel.date}
@@ -253,7 +253,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <Autocomplete
                   disablePortal
                   options={doctorList.map((item) => item.name)}
@@ -271,7 +271,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={4}>
+              {/* <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
                   options={accountantList.map((item) => item.name)}
@@ -288,7 +288,7 @@ const MedicalForm: React.FC<FormProps> = ({
                     <TextField {...params} label={formLabel.accountant} />
                   )}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <h2>Form</h2>
               </Grid>
