@@ -4,6 +4,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import PDFDocument from "pdfkit";
 import path from "path";
 
+const accountant = {
+  id: "e3f447ea-301d-48eb-8c2f-9037781aa711",
+  created_at: "2024-05-10T06:13:02.679349+00:00",
+  name: "Kunthea",
+  role: "accountant",
+  name_kh: "គន្ធា​",
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // if (
@@ -80,7 +88,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       (prescription: any) =>
         prescription.addInto === "invoice" || prescription.addInto === "both"
     ),
-    accountant: req.body.accountant,
+    accountant: accountant,
   });
 
   // doc.font("Khmer").text("ឈ្មោះ").moveDown(0.5);

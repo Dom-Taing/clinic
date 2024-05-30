@@ -35,7 +35,7 @@ export default function Home({
     link.click();
     document.body.removeChild(link);
   };
-  console.log("medicineList", medicineList);
+
   return (
     <>
       <Head>
