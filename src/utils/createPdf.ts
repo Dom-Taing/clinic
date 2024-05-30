@@ -13,8 +13,8 @@ interface Prescription {
   amount: number;
   unitPrice: number;
   totalPrice: number;
-  usage: string;
   unit: string;
+  usage: string;
 }
 interface User {
   name: string;
