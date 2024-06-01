@@ -63,7 +63,13 @@ function getFileName(name: string) {
   return fileName;
 }
 
-function insertImage(doc, file: string, xPos, yPos, config) {
+function insertImage(
+  doc: any,
+  file: string,
+  xPos: number,
+  yPos: number,
+  config: any
+) {
   if (fs.existsSync(path.resolve(file))) {
     doc.image(path.resolve(file), xPos, yPos, config);
   }
