@@ -4,12 +4,23 @@ import { NextApiRequest, NextApiResponse } from "next";
 import PDFDocument from "pdfkit";
 import path from "path";
 
-const accountant = {
-  id: "e3f447ea-301d-48eb-8c2f-9037781aa711",
-  created_at: "2024-05-10T06:13:02.679349+00:00",
-  name: "Kunthea",
-  role: "accountant",
-  name_kh: "គន្ធា​",
+const accountants = {
+  "94aed8fe-7c58-4890-b99f-dcf4c389153a": {
+    id: "e3f447ea-301d-48eb-8c2f-9037781aa711",
+    created_at: "2024-05-10T06:13:02.679349+00:00",
+    name: "Kunthea",
+    role: "accountant",
+    name_kh: "គន្ធា​",
+    clinic: "94aed8fe-7c58-4890-b99f-dcf4c389153a",
+  },
+  "5bfd930d-4c71-4723-b051-79ce11bf67a4": {
+    id: "fef424d3-6ed9-4a45-8405-a7539982f3ad",
+    created_at: "2024-06-01T06:50:34.542899+00:00",
+    name: "Man Theary",
+    role: "accountant",
+    name_kh: null,
+    clinic: "5bfd930d-4c71-4723-b051-79ce11bf67a4",
+  },
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -29,19 +40,33 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   //   res.status(400).json({ error: "Invalid request body" });
   //   return;
   // }
+
+  const {
+    clinic,
+    diagnosis,
+    doctor,
+    accountant = accountants[clinic.id as keyof typeof accountants],
+    name,
+    age,
+    sex,
+    prescription,
+    date,
+  } = req.body;
+
   const supabase = createSupaClient();
   var recordId;
   try {
     const createdRecord = await supabase
       .from("Record")
       .insert({
-        diagnosis: req.body.diagnosis,
-        doctor: req.body.doctor?.id,
-        accountant: req.body.accountant?.id,
-        patient_name: req.body.name,
-        patient_age: req.body.age,
-        patient_sex: req.body.sex,
-        prescription: req.body.prescription,
+        diagnosis: diagnosis,
+        doctor: doctor?.id,
+        accountant: accountant?.id,
+        patient_name: name,
+        patient_age: age,
+        patient_sex: sex,
+        prescription: prescription,
+        clinic: clinic?.id,
       })
       .select("*");
     recordId = createdRecord?.data?.[0].invoiceNo;
@@ -63,28 +88,28 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   doc.pipe(res);
   doc.registerFont("Khmer", path.resolve("./public/Khmer-Regular.ttf"));
   doc.registerFont("Fancy-Khmer", path.resolve("./public/Moul-Regular.ttf"));
-  await createPrescriptionPdf(doc, "kh", {
-    prescription: req.body.prescription.filter(
+  await createPrescriptionPdf(doc, "kh", clinic, {
+    prescription: prescription.filter(
       (prescription: any) =>
         prescription.addInto === "prescription" ||
         prescription.addInto === "both"
     ),
-    name: req.body.name,
-    sex: req.body.sex,
-    age: req.body.age,
-    diagnosis: req.body.diagnosis,
-    date: req.body.date,
-    doctor: req.body.doctor,
+    name: name,
+    sex: sex,
+    age: age,
+    diagnosis: diagnosis,
+    date: date,
+    doctor: doctor,
   });
   doc.addPage({ margin: 24, size: "A5" });
 
-  await createInvoicePdf(doc, "kh", {
-    name: req.body.name,
-    sex: req.body.sex,
-    age: req.body.age,
-    date: req.body.date,
+  await createInvoicePdf(doc, "kh", clinic, {
+    name: name,
+    sex: sex,
+    age: age,
+    date: date,
     invoiceNo: recordId,
-    prescription: req.body.prescription.filter(
+    prescription: prescription.filter(
       (prescription: any) =>
         prescription.addInto === "invoice" || prescription.addInto === "both"
     ),
