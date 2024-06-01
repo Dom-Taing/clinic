@@ -355,6 +355,7 @@ export const createInvoicePdf = async (
     .font(invoicePdfConfig.khFont)
     .text(`${content.invoiceLabel}${invoiceNo}`, xPos, doc.y);
 
+  doc.moveDown(0.25);
   xPos = margin * 1.5;
   yPos = doc.y;
   doc
@@ -471,6 +472,7 @@ export const createInvoicePdf = async (
       align: "center",
       width: cellWidth[4],
     });
+  doc.moveDown(0.125);
 
   cellYPos.push(doc.y);
   doc
@@ -534,6 +536,7 @@ export const createInvoicePdf = async (
     align: "center",
     width: signatureWidth,
   });
+  doc.moveDown(0.25);
   doc.text(content.SignatureLabelEn, {
     align: "center",
     width: signatureWidth,
