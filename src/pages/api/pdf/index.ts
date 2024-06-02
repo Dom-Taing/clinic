@@ -21,6 +21,14 @@ const accountants = {
     name_kh: null,
     clinic: "5bfd930d-4c71-4723-b051-79ce11bf67a4",
   },
+  "f7e24ce6-ac51-4012-91d7-295bd51ce128": {
+    id: "6b68c883-d5e1-44d5-90b7-5485379ffd5c",
+    created_at: "2024-06-02T07:23:28.065008+00:00",
+    name: "Baen Alisa",
+    role: "accountant",
+    name_kh: "ប៉ែន អេលីសា",
+    clinic: "f7e24ce6-ac51-4012-91d7-295bd51ce128",
+  },
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
