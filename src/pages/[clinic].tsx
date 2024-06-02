@@ -65,7 +65,11 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
       return { redirect: { destination: "/", permanent: false } };
     }
 
-    let { data: Medicine } = await supabase.from("Medicine").select("*"); // need to filter by clinic later
+    let { data: Medicine } = await supabase
+      .from("Medicine")
+      .select("*")
+      .order("medicine")
+      .eq("clinic", Clinic[0].id);
     let { data: Diagnosis } = await supabase.from("Sickness").select("*");
     let { data: User } = await supabase
       .from("User")
