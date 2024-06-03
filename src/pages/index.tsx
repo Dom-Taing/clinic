@@ -7,35 +7,34 @@ import MedicalForm from "@/components/MedicalForm";
 import { GetServerSideProps, NextApiRequest, NextApiResponse } from "next";
 import { createSupaClient } from "@/service/supa";
 import { createClient } from "@supabase/supabase-js";
+import { clinic } from "@/types/common";
+import { Paper } from "@mui/material";
+import styled from "@emotion/styled";
+import Link from "next/link";
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const StyledPaper = styled(Paper)`
+  padding: 1rem;
+  width: 100%;
+  cursor: pointer;
+`;
+
+const Wrapper = styled.div`
+  min-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: column;
+`;
+
 interface HomeProps {
-  medicineList: { id: string; medicine: string; price: number }[];
-  diagnosisList: { id: string; name: string }[];
-  doctorList: { id: string; name: string }[];
-  accountantList: { id: string; name: string }[];
-  usageList: { id: string; usage: string }[];
+  clinic: clinic[];
 }
 
-export default function Home({
-  medicineList,
-  diagnosisList,
-  doctorList,
-  accountantList,
-  usageList,
-}: HomeProps) {
-  const handleClick = async () => {
-    const response = await axios.post("/api/pdf", {}, { responseType: "blob" });
-    const blob = new Blob([response.data], { type: "application/pdf" });
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "generated.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
+export default function Home({ clinic }: HomeProps) {
   return (
     <>
       <Head>
@@ -45,13 +44,19 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <MedicalForm
-          medicineList={medicineList}
-          diagnosisList={diagnosisList}
-          doctorList={doctorList}
-          accountantList={accountantList}
-          usageList={usageList}
-        />
+        <Wrapper>
+          {clinic.map((clinic) => (
+            <StyledPaper
+              key={clinic.id}
+              elevation={2}
+              onClick={() => {
+                window.location.href = `/${clinic.name}`;
+              }}
+            >
+              <Link href={`/${clinic.name}`}>{clinic.name}</Link>
+            </StyledPaper>
+          ))}
+        </Wrapper>
       </main>
     </>
   );
@@ -61,55 +66,31 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
   context
 ) => {
   try {
-    const clinicId = process.env.SOKSAN_ID ?? "";
+    // const clinicId = process.env.SOKSAN_ID ?? "";
     const supabase = createSupaClient();
-
-    let { data: Medicine } = await supabase
-      .from("Medicine")
-      .select("*")
-      .eq("clinic", clinicId);
-    let { data: Diagnosis } = await supabase.from("Sickness").select("*");
-    let { data: User } = await supabase
-      .from("User")
-      .select("*")
-      .eq("clinic", clinicId);
-    let { data: Usage } = await supabase.from("Usage").select("*");
-    const doctor = User?.filter((user) => user.role === "doctor");
-    const accountant = User?.filter((user) => user.role === "accountant");
+    let { data: Clinic } = await supabase.from("Clinic").select("*");
+    // let { data: Medicine } = await supabase
+    //   .from("Medicine")
+    //   .select("*")
+    //   .eq("clinic", clinicId);
+    // let { data: Diagnosis } = await supabase.from("Sickness").select("*");
+    // let { data: User } = await supabase
+    //   .from("User")
+    //   .select("*")
+    //   .eq("clinic", clinicId);
+    // let { data: Usage } = await supabase.from("Usage").select("*");
+    // const doctor = User?.filter((user) => user.role === "doctor");
+    // const accountant = User?.filter((user) => user.role === "accountant");
 
     return {
       props: {
-        medicineList: Medicine || [
-          { medicine: "Paracetamol", price: 0.1 },
-          { medicine: "Ibuprofen", price: 0.2 },
-          { medicine: "Aspirin", price: 0.3 },
-        ],
-        diagnosisList: Diagnosis || ["Headache", "Fever", "Cold", "Cough"],
-        doctorList: doctor || [
-          "Dr. John Doe",
-          "Dr. Jane Doe",
-          "Dr. Michael Doe",
-        ],
-        accountantList: accountant || [
-          "Mr. John Doe",
-          "Mr. Jane Doe",
-          "Mr. Michael Doe",
-        ],
-        usageList: Usage || ["Before meal", "After meal"],
+        clinic: Clinic || [],
       },
     };
   } catch {
     return {
       props: {
-        medicineList: [
-          { medicine: "Paracetamol", price: 0.1 },
-          { medicine: "Ibuprofen", price: 0.2 },
-          { medicine: "Aspirin", price: 0.3 },
-        ],
-        diagnosisList: ["Headache", "Fever", "Cold", "Cough"],
-        doctorList: ["Dr. John Doe", "Dr. Jane Doe", "Dr. Michael Doe"],
-        accountantList: ["Mr. John Doe", "Mr. Jane Doe", "Mr. Michael Doe"],
-        usageList: ["Before meal", "After meal"],
+        clinic: [],
       },
     };
   }

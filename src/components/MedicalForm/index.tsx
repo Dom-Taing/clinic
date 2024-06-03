@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "@emotion/styled";
 import { getAge } from "@/utils/date";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
+import { clinic } from "@/types/common";
 
 interface FormProps {
   medicineList: { id: string; medicine: string; price: number }[];
@@ -24,6 +25,7 @@ interface FormProps {
   doctorList: { id: string; name: string }[];
   accountantList: { id: string; name: string }[];
   usageList: { id: string; usage: string }[];
+  clinic: clinic;
 }
 
 interface PersonalInfo {
@@ -82,6 +84,7 @@ const MedicalForm: React.FC<FormProps> = ({
   doctorList = [],
   accountantList = [],
   usageList = [],
+  clinic,
 }) => {
   const [formData, setFormData] = useState<PersonalInfo>({
     name: "",
@@ -194,6 +197,7 @@ const MedicalForm: React.FC<FormProps> = ({
       const response = await axios.post(
         "/api/pdf",
         {
+          clinic: clinic,
           name: formData.name,
           sex: formData.sex,
           age: formData.age,

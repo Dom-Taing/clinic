@@ -62,3 +62,9 @@ export const formLabelKh = {
 };
 
 export const unitOptions = ["គ្រាប់", "កញ្ចប់", "អំពូល", "ដប"];
+
+export enum Org {
+  Soksan = "soksan",
+  Sokheng = "sokheng",
+  Sokeo = "sokeo",
+}

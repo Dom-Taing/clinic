@@ -7,6 +7,7 @@ import {
 } from "./config";
 import path from "path";
 import fs from "fs";
+import { clinic } from "@/types/common";
 
 interface Prescription {
   medicine: string;
@@ -62,9 +63,22 @@ function getFileName(name: string) {
   return fileName;
 }
 
+function insertImage(
+  doc: any,
+  file: string,
+  xPos: number,
+  yPos: number,
+  config: any
+) {
+  if (fs.existsSync(path.resolve(file))) {
+    doc.image(path.resolve(file), xPos, yPos, config);
+  }
+}
+
 export const createPrescriptionPdf = async (
   doc: any,
   language: "kh" | "en",
+  clinic: clinic,
   { prescription, name, sex, age, diagnosis, date, doctor }: Prescriptiondata
 ) => {
   const { content, ...prescriptionPdfConfig } =
@@ -90,9 +104,9 @@ export const createPrescriptionPdf = async (
   var yPos = margin; // Adjust as needed
 
   // logo
-  xPos = margin;
+  xPos = margin - 10;
   yPos = 8;
-  doc.image(path.resolve("./public/logo.jpg"), xPos, yPos, {
+  doc.image(path.resolve(`./public/logo/${clinic.id}.jpg`), xPos, yPos, {
     width: 60,
   });
 
@@ -100,12 +114,12 @@ export const createPrescriptionPdf = async (
   doc.fontSize(titleFontSize);
   doc
     .font(prescriptionPdfConfig.titleFont)
-    .text(titleTextLine1, doc.page.margins.left, doc.page.margins.top, {
+    .text(clinic.title_kh, doc.page.margins.left, doc.page.margins.top, {
       align: "center",
     });
   doc
     .font(prescriptionPdfConfig.khFont)
-    .text(titleTextLine2, { align: "center" });
+    .text(clinic.title_en, { align: "center" });
   doc.moveDown(0.5);
 
   // Add normal text
@@ -238,13 +252,15 @@ export const createPrescriptionPdf = async (
     });
 
   if (
-    fs.existsSync(path.resolve(`./public/${getFileName(doctor?.name)}.png`))
+    fs.existsSync(
+      path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`)
+    )
   ) {
     const signatureWidth = 120;
     xPos = doc.page.width - 22 - signatureWidth;
     yPos = doc.y;
     doc.image(
-      path.resolve(`./public/${getFileName(doctor?.name)}.png`),
+      path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
       xPos,
       doc.y,
       {
@@ -279,15 +295,19 @@ export const createPrescriptionPdf = async (
     .lineTo(pageWidth - xPos, doc.y)
     .stroke();
   doc.moveDown(0.2);
+
   doc
     .font(prescriptionPdfConfig.khFont)
-    .text(content.address, xPos, doc.y, { width: pageWidth });
+    .text(`${clinic.address} Tel: ${clinic.phone_number}`, xPos, doc.y, {
+      width: pageWidth,
+    });
   return;
 };
 
 export const createInvoicePdf = async (
   doc: any,
   language: "kh" | "en",
+  clinic: clinic,
   { name, invoiceNo, sex, age, date, prescription, accountant }: InvoiceData
 ) => {
   const { content, ...invoicePdfConfig } =
@@ -305,7 +325,7 @@ export const createInvoicePdf = async (
   // logo
   xPos = margin + 7;
   yPos = 8;
-  doc.image(path.resolve("./public/logo.jpg"), xPos, yPos, {
+  doc.image(path.resolve(`./public/logo/${clinic.id}.jpg`), xPos, yPos, {
     width: 60,
   });
   const logoText = content.logoText.split("\n");
@@ -314,11 +334,11 @@ export const createInvoicePdf = async (
   doc
     .fontSize(6)
     .font(invoicePdfConfig.fancyKhFont)
-    .text(logoText[0], xPos, yPos, { width: 80, align: "center" })
+    .text(clinic.title_kh, xPos, yPos, { width: 80, align: "center" })
     .moveDown(0.25)
     .fontSize(6)
     .font(invoicePdfConfig.enFont)
-    .text(logoText[1], { width: 80, align: "center" });
+    .text(clinic.title_en, { width: 80, align: "center" });
 
   xPos = pageWidth - margin - 110;
   yPos = 8;
@@ -510,12 +530,14 @@ export const createInvoicePdf = async (
   const signatureWidth = 150;
   const signatureHeight = 50;
   if (
-    fs.existsSync(path.resolve(`./public/${getFileName(accountant?.name)}.png`))
+    fs.existsSync(
+      path.resolve(`./public/signature/${getFileName(accountant?.name)}.png`)
+    )
   ) {
     xPos = doc.page.width - margin - signatureWidth;
     yPos = doc.page.height - 100 - signatureHeight;
     doc.image(
-      path.resolve(`./public/${getFileName(accountant?.name)}.png`),
+      path.resolve(`./public/signature/${getFileName(accountant?.name)}.png`),
       xPos,
       yPos,
       {
@@ -545,7 +567,11 @@ export const createInvoicePdf = async (
   // footer
   yPos = doc.page.height - margin - 32;
   xPos = margin;
-  doc.fontSize(8).text(content.footer, xPos, yPos, { align: "center" });
+  const footerText =
+    clinic.name === "soksan"
+      ? content.footer
+      : `${clinic.address}\nលេខទូរស័ព្ទ: ${clinic.phone_number}`;
+  doc.fontSize(8).text(footerText, xPos, yPos, { align: "center" });
   return;
 };
 
