@@ -66,9 +66,21 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
   context
 ) => {
   try {
+    // const clinicId = process.env.SOKSAN_ID ?? "";
     const supabase = createSupaClient();
-
     let { data: Clinic } = await supabase.from("Clinic").select("*");
+    // let { data: Medicine } = await supabase
+    //   .from("Medicine")
+    //   .select("*")
+    //   .eq("clinic", clinicId);
+    // let { data: Diagnosis } = await supabase.from("Sickness").select("*");
+    // let { data: User } = await supabase
+    //   .from("User")
+    //   .select("*")
+    //   .eq("clinic", clinicId);
+    // let { data: Usage } = await supabase.from("Usage").select("*");
+    // const doctor = User?.filter((user) => user.role === "doctor");
+    // const accountant = User?.filter((user) => user.role === "accountant");
 
     return {
       props: {
