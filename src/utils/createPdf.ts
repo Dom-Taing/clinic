@@ -568,9 +568,8 @@ export const createInvoicePdf = async (
   yPos = doc.page.height - margin - 32;
   xPos = margin;
   const footerText =
-    clinic.name === "soksan"
-      ? content.footer
-      : `${clinic.address}\nលេខទូរស័ព្ទ: ${clinic.phone_number}`;
+    content.footer[clinic.name as keyof typeof content.footer] ||
+    `${clinic.address}\nលេខទូរស័ព្ទ: ${clinic.phone_number}`;
   doc.fontSize(8).text(footerText, xPos, yPos, { align: "center" });
   return;
 };
