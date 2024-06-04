@@ -277,7 +277,7 @@ export const createPrescriptionPdf = async (
     doc
       .fillColor("#5287FF")
       .font(prescriptionPdfConfig.titleFont)
-      .fontSize(titleFontSize)
+      .fontSize(clinic.name === "soksan" ? titleFontSize : subTitleFontSize)
       .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
         align: "right",
         width: pageWidth - margin - 22,
