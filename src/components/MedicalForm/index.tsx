@@ -198,10 +198,10 @@ const MedicalForm: React.FC<FormProps> = ({
         "/api/pdf",
         {
           clinic: clinic,
-          name: formData.name,
+          name: formData.name.replace(/\s+/g, " "),
           sex: formData.sex,
           age: formData.age,
-          diagnosis: formData.diagnosis,
+          diagnosis: formData.diagnosis.replace(/\s+/g, " "),
           prescription: prescriptions,
           date: formData.date,
           doctor: doctorList.find((item) => item.name === employeeInfo.doctor),
@@ -333,8 +333,10 @@ const MedicalForm: React.FC<FormProps> = ({
                   name="age"
                   value={formData.age === 0 ? "" : formData.age}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const value = e.target.value;
-                    e.target.value = value.replace(/^0+/, "") || "";
+                    let value = e.target.value;
+                    value = value.replace(/^0+/, "") || "";
+                    value = value.substring(0, 2);
+                    e.target.value = value;
                     onFormDataChange(e);
                   }}
                 />
