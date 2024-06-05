@@ -161,3 +161,12 @@ export const Month = [
   "Nov",
   "Dec",
 ];
+
+export const signatureMetaData = {
+  bin_phal: {
+    aspectRatio: 3.05,
+  },
+  huot_sothaly: {
+    aspectRatio: 2.73,
+  },
+};

@@ -264,15 +264,16 @@ export const createPrescriptionPdf = async (
       xPos,
       doc.y,
       {
-        fit: [signatureWidth, 50],
-        valign: "center",
-        align: "center",
+        // fit: [signatureWidth, 50],
+        // valign: "center",
+        // align: "center",
+        width: signatureWidth,
       }
     );
   }
 
   if (doctor?.name_kh) {
-    yPos = doc.page.height - doc.page.margins.bottom - 48;
+    yPos = doc.y;
     xPos = margin;
     doc
       .fillColor("#5287FF")
