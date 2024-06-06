@@ -65,7 +65,7 @@ export const invoicePdfConfigEn = {
     logoText: "មន្ទីរពហុព្យាបាល សុខសាន្ត\nSOK SAN POLYCLINIC",
     SignatureLabelEn: "Accountant Signature",
     SignatureLabelKh: "ហត្ថលេខា បេឡា",
-    footer: "",
+    footer: { soksan: undefined },
   },
 };
 
@@ -137,8 +137,12 @@ export const invoicePdfConfigKh = {
     SignatureLabelKh: "ហត្ថលេខា បេឡា",
     header: "ព្រះរាជាណាចក្រកម្ពុជា\nជាតិ សាសនា ព្រះមហាក្សត្រ",
     logoText: "មន្ទីរពហុព្យាបាល សុខសាន្ត\nSOKSAN POLYCLINIC",
-    footer:
-      "ផ្ទះលេខ ៧៦៤, ផ្លូវជាតិលេខ ៥ គីឡូម៉ែត្រលេខ ៦, ខណ្ឌ ឬស្សីកែវ រាជធានីភ្នំពេញ (ទល់មុខរោងចក្រ កូកាកូឡា)\nលេខទូរស័ព្ទ 010 89 22 89, 017 89 22 89, 012 99 37 22",
+    footer: {
+      soksan:
+        "ផ្ទះលេខ ៧៦៤, ផ្លូវជាតិលេខ ៥ គីឡូម៉ែត្រលេខ ៦, ខណ្ឌ ឬស្សីកែវ រាជធានីភ្នំពេញ (ទល់មុខរោងចក្រ កូកាកូឡា)\nលេខទូរស័ព្ទ 010 89 22 89, 017 89 22 89, 012 99 37 22",
+      sokeo:
+        "ផ្ទះលេខ ២០-២១-២២, ផ្លូវ ១២៣K, ភូមិត្រពាំងពោធ៍ សង្កាត់ចោមចៅ ខណ្ឌពោធ៍សែនជ័យ រាជធានីភ្នំពេញ\nលេខទូរស័ព្ទ 010/061 93 81 93",
+    },
   },
 };
 
@@ -157,3 +161,12 @@ export const Month = [
   "Nov",
   "Dec",
 ];
+
+export const signatureMetaData = {
+  bin_phal: {
+    aspectRatio: 3.05,
+  },
+  huot_sothaly: {
+    aspectRatio: 2.73,
+  },
+};

@@ -264,15 +264,16 @@ export const createPrescriptionPdf = async (
       xPos,
       doc.y,
       {
-        fit: [signatureWidth, 50],
-        valign: "center",
-        align: "center",
+        // fit: [signatureWidth, 50],
+        // valign: "center",
+        // align: "center",
+        width: signatureWidth,
       }
     );
   }
 
   if (doctor?.name_kh) {
-    yPos = doc.page.height - doc.page.margins.bottom - 48;
+    yPos = doc.y;
     xPos = margin;
     doc
       .fillColor("#242F91")
@@ -568,9 +569,8 @@ export const createInvoicePdf = async (
   yPos = doc.page.height - margin - 32;
   xPos = margin;
   const footerText =
-    clinic.name === "soksan"
-      ? content.footer
-      : `${clinic.address}\nលេខទូរស័ព្ទ: ${clinic.phone_number}`;
+    content.footer[clinic.name as keyof typeof content.footer] ||
+    `${clinic.address}\nលេខទូរស័ព្ទ: ${clinic.phone_number}`;
   doc.fontSize(8).text(footerText, xPos, yPos, { align: "center" });
   return;
 };
