@@ -70,7 +70,10 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
       .select("*")
       .order("medicine")
       .eq("clinic", Clinic[0].id);
-    let { data: Diagnosis } = await supabase.from("Sickness").select("*");
+    let { data: Diagnosis } = await supabase
+      .from("Sickness")
+      .select("*")
+      .eq("clinic", process.env.SOKSAN_ID);
     let { data: User } = await supabase
       .from("User")
       .select("*")
