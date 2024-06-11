@@ -270,6 +270,8 @@ export const createPrescriptionPdf = async (
         width: signatureWidth,
       }
     );
+  } else {
+    doc.moveDown(3);
   }
 
   if (doctor?.name_kh) {
@@ -541,7 +543,10 @@ export const createInvoicePdf = async (
     .stroke();
 
   // signature
-  const signatureWidth = 150;
+  let signatureWidth = 150;
+  if (accountant?.name === "Hong Sopheaktra") {
+    signatureWidth = 160;
+  }
   const signatureHeight = 50;
   if (
     fs.existsSync(
