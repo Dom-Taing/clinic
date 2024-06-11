@@ -275,14 +275,27 @@ export const createPrescriptionPdf = async (
   if (doctor?.name_kh) {
     yPos = doc.y;
     xPos = margin;
-    doc
-      .fillColor("#242F91")
-      .font(prescriptionPdfConfig.titleFont)
-      .fontSize(subTitleFontSize)
-      .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
-        align: "right",
-        width: pageWidth - margin - 22,
-      });
+    if (doctor?.name === "Bin Phal") {
+      xPos = doc.page.width - 22 - 120;
+      yPos = doc.y;
+      doc
+        .fillColor("#242F91")
+        .font(prescriptionPdfConfig.titleFont)
+        .fontSize(subTitleFontSize)
+        .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
+          align: "center",
+          width: 120,
+        });
+    } else {
+      doc
+        .fillColor("#242F91")
+        .font(prescriptionPdfConfig.titleFont)
+        .fontSize(subTitleFontSize)
+        .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
+          align: "right",
+          width: pageWidth - margin - 22,
+        });
+    }
   }
   // footer
   yPos = doc.page.height - doc.page.margins.bottom - 32;
