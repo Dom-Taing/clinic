@@ -33,22 +33,6 @@ const accountants = {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  // if (
-  //   !(
-  //     req.body.name &&
-  //     req.body.sex &&
-  //     req.body.age &&
-  //     req.body.diagnosis &&
-  //     req.body.prescription &&
-  //     req.body.date &&
-  //     req.body.doctor &&
-  //     req.body.accountant
-  //   )
-  // ) {
-  //   res.status(400).json({ error: "Invalid request body" });
-  //   return;
-  // }
-
   const {
     clinic,
     diagnosis,

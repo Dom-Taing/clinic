@@ -6,3 +6,12 @@ export interface clinic {
   address: string;
   phone_number: string;
 }
+export interface Prescription {
+  medicine: string;
+  amount: number;
+  unit: string;
+  unitPrice: number;
+  totalPrice: number;
+  usage: string;
+  addInto: string;
+}

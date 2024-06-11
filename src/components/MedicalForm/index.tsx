@@ -10,14 +10,14 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { formLabelEn, formLabelKh, unitOptions } from "./config";
+import { amountOptions, formLabelEn, formLabelKh } from "./config";
 import axios from "axios";
 import DataTable from "../DataTable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "@emotion/styled";
 import { getAge } from "@/utils/date";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
-import { clinic } from "@/types/common";
+import { Prescription, clinic } from "@/types/common";
 
 interface FormProps {
   medicineList: { id: string; medicine: string; price: number }[];
@@ -39,16 +39,6 @@ interface PersonalInfo {
   usage: string;
   addInto: string;
   date: string;
-}
-
-interface Prescription {
-  medicine: string;
-  amount: number;
-  unit: string;
-  unitPrice: number;
-  totalPrice: number;
-  usage: string;
-  addInto: string;
 }
 
 interface ErrorType {
@@ -382,7 +372,31 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={6}>
+                <Autocomplete
+                  disablePortal
+                  options={amountOptions}
+                  freeSolo
+                  value={
+                    formData.amount ? `${formData.amount} ${formData.unit}` : ""
+                  }
+                  onChange={(e, newValue) => {
+                    setFormData({
+                      ...formData,
+                      amount: newValue?.match(/\d+/g)?.map(Number)[0] || 0,
+                      unit: newValue?.replace(/\d+/g, "").trim() || "",
+                    });
+                  }}
+                  onInputChange={() => {
+                    setError({ ...error, amount: "" });
+                  }}
+                  autoSelect
+                  renderInput={(params) => (
+                    <TextField {...params} label={formLabel.amount} />
+                  )}
+                />
+              </Grid>
+              {/* <Grid item xs={3}>
                 <TextField
                   type="number"
                   label={formLabel.amount}
@@ -410,7 +424,7 @@ const MedicalForm: React.FC<FormProps> = ({
                     <TextField {...params} label={formLabel.unit} />
                   )}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
