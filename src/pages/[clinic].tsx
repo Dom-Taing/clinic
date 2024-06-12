@@ -73,7 +73,8 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
     let { data: Diagnosis } = await supabase
       .from("Sickness")
       .select("*")
-      .eq("clinic", process.env.SOKSAN_ID);
+      .order("name")
+      .eq("clinic", Clinic[0].id);
     let { data: User } = await supabase
       .from("User")
       .select("*")
