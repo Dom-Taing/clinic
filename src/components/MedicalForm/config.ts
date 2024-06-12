@@ -61,11 +61,25 @@ export const formLabelKh = {
   date: "កាលបរិច្ឆេទ",
 };
 
-const unitOptions = ["គ្រាប់", "កញ្ចប់", "អំពូល", "ដប"];
-const amountNumberOptions = ["5", "10"];
-export const amountOptions = unitOptions
-  .map((unit) => amountNumberOptions.map((amount) => `${amount} ${unit}`))
-  .flat();
+// const unitOptions = ["គ្រាប់", "កញ្ចប់", "អំពូល", "ដប"];
+// const amountNumberOptions = ["5", "10"];
+// export const amountOptions = unitOptions
+//   .map((unit) => amountNumberOptions.map((amount) => `${amount} ${unit}`))
+//   .flat();
+
+export const amountOptions = [
+  "10 គ្រាប់",
+  "05 គ្រាប់",
+  "06 គ្រាប់",
+  "04 អំពូល",
+  "4 កញ្ចប់",
+  "08 កញ្ចប់",
+  "01 ដប",
+  "01 បន្ទះ",
+  "30 គ្រាប់",
+  "15 គ្រាប់",
+  "12 គ្រាប់",
+];
 
 export enum Org {
   Soksan = "soksan",
