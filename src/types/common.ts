@@ -15,3 +15,10 @@ export interface Prescription {
   usage: string;
   addInto: string;
 }
+
+export interface Usage {
+  id: string;
+  usage: string;
+  sort: number;
+  group: string;
+}

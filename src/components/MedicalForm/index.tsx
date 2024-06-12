@@ -17,14 +17,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "@emotion/styled";
 import { getAge } from "@/utils/date";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
-import { Prescription, clinic } from "@/types/common";
+import { Prescription, Usage, clinic } from "@/types/common";
 
 interface FormProps {
   medicineList: { id: string; medicine: string; price: number }[];
   diagnosisList: { id: string; name: string }[];
   doctorList: { id: string; name: string }[];
   accountantList: { id: string; name: string }[];
-  usageList: { id: string; usage: string }[];
+  usageList: Usage[];
   clinic: clinic;
 }
 
@@ -307,11 +307,11 @@ const MedicalForm: React.FC<FormProps> = ({
                   name="sex"
                   value={formData.sex}
                 >
-                  <MenuItem value={"male"}>
-                    {formLabel.sexOptions.male}
-                  </MenuItem>
                   <MenuItem value={"female"}>
                     {formLabel.sexOptions.female}
+                  </MenuItem>
+                  <MenuItem value={"male"}>
+                    {formLabel.sexOptions.male}
                   </MenuItem>
                 </TextField>
               </Grid>
@@ -428,11 +428,19 @@ const MedicalForm: React.FC<FormProps> = ({
               <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
-                  options={usageList.map((item) => item.usage)}
-                  // freeSolo
+                  options={usageList.map((item) => ({
+                    label: item.usage,
+                    group: item.group,
+                  }))}
+                  freeSolo
                   value={formData.usage}
+                  groupBy={(option) => option.group}
                   onChange={(e, newValue) => {
-                    onFormDataChange(e, "usage", newValue || "");
+                    if (typeof newValue === "string") {
+                      onFormDataChange(e, "usage", newValue || "");
+                    } else {
+                      onFormDataChange(e, "usage", newValue?.label || "");
+                    }
                   }}
                   autoSelect
                   renderInput={(params) => (
