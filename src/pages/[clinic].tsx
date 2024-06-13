@@ -78,7 +78,10 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
       .from("User")
       .select("*")
       .eq("clinic", Clinic[0].id);
-    let { data: Usage } = await supabase.from("Usage").select("*");
+    let { data: Usage } = await supabase
+      .from("Usage")
+      .select("*")
+      .order("sort");
     const doctor = User?.filter((user) => user.role === "doctor");
     const accountant = User?.filter((user) => user.role === "accountant");
 
