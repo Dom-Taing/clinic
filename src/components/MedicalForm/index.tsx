@@ -10,21 +10,21 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { formLabelEn, formLabelKh, unitOptions } from "./config";
+import { amountOptions, formLabelEn, formLabelKh } from "./config";
 import axios from "axios";
 import DataTable from "../DataTable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "@emotion/styled";
 import { getAge } from "@/utils/date";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
-import { clinic } from "@/types/common";
+import { Prescription, Usage, clinic } from "@/types/common";
 
 interface FormProps {
   medicineList: { id: string; medicine: string; price: number }[];
   diagnosisList: { id: string; name: string }[];
   doctorList: { id: string; name: string }[];
   accountantList: { id: string; name: string }[];
-  usageList: { id: string; usage: string }[];
+  usageList: Usage[];
   clinic: clinic;
 }
 
@@ -39,16 +39,6 @@ interface PersonalInfo {
   usage: string;
   addInto: string;
   date: string;
-}
-
-interface Prescription {
-  medicine: string;
-  amount: number;
-  unit: string;
-  unitPrice: number;
-  totalPrice: number;
-  usage: string;
-  addInto: string;
 }
 
 interface ErrorType {
@@ -100,7 +90,7 @@ const MedicalForm: React.FC<FormProps> = ({
   });
   const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo>({
     doctor: "",
-    accountant: "",
+    accountant: accountantList.length === 1 ? accountantList[0].name : "",
   });
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [error, setError] = useState<ErrorType>({
@@ -244,7 +234,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   <Alert severity="error">{error.general}</Alert>
                 </Grid>
               )}
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   id="date-field"
                   label={formLabel.date}
@@ -257,7 +247,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
                   options={doctorList.map((item) => item.name)}
@@ -275,7 +265,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              {/* <Grid item xs={4}>
+              <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
                   options={accountantList.map((item) => item.name)}
@@ -292,7 +282,7 @@ const MedicalForm: React.FC<FormProps> = ({
                     <TextField {...params} label={formLabel.accountant} />
                   )}
                 />
-              </Grid> */}
+              </Grid>
               <Grid item xs={12}>
                 <h2>Form</h2>
               </Grid>
@@ -317,11 +307,11 @@ const MedicalForm: React.FC<FormProps> = ({
                   name="sex"
                   value={formData.sex}
                 >
-                  <MenuItem value={"male"}>
-                    {formLabel.sexOptions.male}
-                  </MenuItem>
                   <MenuItem value={"female"}>
                     {formLabel.sexOptions.female}
+                  </MenuItem>
+                  <MenuItem value={"male"}>
+                    {formLabel.sexOptions.male}
                   </MenuItem>
                 </TextField>
               </Grid>
@@ -382,7 +372,31 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={6}>
+                <Autocomplete
+                  disablePortal
+                  options={amountOptions}
+                  freeSolo
+                  value={
+                    formData.amount ? `${formData.amount} ${formData.unit}` : ""
+                  }
+                  onChange={(e, newValue) => {
+                    setFormData({
+                      ...formData,
+                      amount: newValue?.match(/\d+/g)?.map(Number)[0] || 0,
+                      unit: newValue?.replace(/\d+/g, "").trim() || "",
+                    });
+                  }}
+                  onInputChange={() => {
+                    setError({ ...error, amount: "" });
+                  }}
+                  autoSelect
+                  renderInput={(params) => (
+                    <TextField {...params} label={formLabel.amount} />
+                  )}
+                />
+              </Grid>
+              {/* <Grid item xs={3}>
                 <TextField
                   type="number"
                   label={formLabel.amount}
@@ -410,15 +424,23 @@ const MedicalForm: React.FC<FormProps> = ({
                     <TextField {...params} label={formLabel.unit} />
                   )}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={4}>
                 <Autocomplete
                   disablePortal
-                  options={usageList.map((item) => item.usage)}
-                  // freeSolo
+                  options={usageList.map((item) => ({
+                    label: item.usage,
+                    group: item.group,
+                  }))}
+                  freeSolo
                   value={formData.usage}
+                  groupBy={(option) => option.group}
                   onChange={(e, newValue) => {
-                    onFormDataChange(e, "usage", newValue || "");
+                    if (typeof newValue === "string") {
+                      onFormDataChange(e, "usage", newValue || "");
+                    } else {
+                      onFormDataChange(e, "usage", newValue?.label || "");
+                    }
                   }}
                   autoSelect
                   renderInput={(params) => (

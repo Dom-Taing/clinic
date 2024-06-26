@@ -5,7 +5,7 @@ import axios from "axios";
 import MedicalForm from "@/components/MedicalForm";
 import { GetServerSideProps, NextApiRequest, NextApiResponse } from "next";
 import { createSupaClient } from "@/service/supa";
-import { clinic } from "@/types/common";
+import { Usage, clinic } from "@/types/common";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +14,7 @@ interface HomeProps {
   diagnosisList: { id: string; name: string }[];
   doctorList: { id: string; name: string }[];
   accountantList: { id: string; name: string }[];
-  usageList: { id: string; usage: string }[];
+  usageList: Usage[];
   clinic: clinic;
 }
 
@@ -26,7 +26,6 @@ export default function Home({
   usageList,
   clinic,
 }: HomeProps) {
-  console.log(accountantList);
   return (
     <>
       <Head>
@@ -73,7 +72,8 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
     let { data: Diagnosis } = await supabase
       .from("Sickness")
       .select("*")
-      .eq("clinic", process.env.SOKSAN_ID);
+      .order("name")
+      .eq("clinic", Clinic[0].id);
     let { data: User } = await supabase
       .from("User")
       .select("*")
