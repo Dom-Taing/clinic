@@ -288,6 +288,18 @@ export const createPrescriptionPdf = async (
           align: "center",
           width: 120,
         });
+    } else if (
+      doctor?.name === "Srun Mouyleang" ||
+      doctor?.name === "Heng Simhong"
+    ) {
+      doc
+        .fillColor("#242F91")
+        .font(prescriptionPdfConfig.titleFont)
+        .fontSize(subTitleFontSize - 2)
+        .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
+          align: "right",
+          width: pageWidth - margin - 22,
+        });
     } else {
       doc
         .fillColor("#242F91")
