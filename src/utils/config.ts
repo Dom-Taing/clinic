@@ -50,6 +50,7 @@ export const invoicePdfConfigEn = {
       female: "Female",
     },
     ageLabel: "Age: ",
+    ageValue: (age: number) => age,
     dateLabel: "Date: ",
     prescriptionLabel: {
       header: [
@@ -122,6 +123,51 @@ export const invoicePdfConfigKh = {
       female: "Female",
     },
     ageLabel: "អាយុ / Age: ",
+    ageValue: (age: number) => age,
+    dateLabel: "ថ្ងៃចេញវិក្ក័យបត្រ: ",
+    prescriptionLabel: {
+      header: [
+        { header: "លរ\n ", dataKey: "No" },
+        { header: "បរិយាយមុខទំនិញ\nDescription", dataKey: "Description" },
+        { header: "បរិមាណ\nQty", dataKey: "Qty" },
+        { header: "តម្លៃរាយ\nUnit Price", dataKey: "unitPrice" },
+        { header: "តម្លៃទំនិញ\nAmount", dataKey: "Amount" },
+      ],
+      totalLabel: "តម្លៃសរុប",
+    },
+    SignatureLabelEn: "Accountant Signature",
+    SignatureLabelKh: "ហត្ថលេខា បេឡា",
+    header: "ព្រះរាជាណាចក្រកម្ពុជា\nជាតិ សាសនា ព្រះមហាក្សត្រ",
+    logoText: "មន្ទីរពហុព្យាបាល សុខសាន្ត\nSOKSAN POLYCLINIC",
+    footer: {
+      soksan:
+        "ផ្ទះលេខ ៧៦៤, ផ្លូវជាតិលេខ ៥ គីឡូម៉ែត្រលេខ ៦, ខណ្ឌ ឬស្សីកែវ រាជធានីភ្នំពេញ (ទល់មុខរោងចក្រ កូកាកូឡា)\nលេខទូរស័ព្ទ 010 89 22 89, 017 89 22 89, 012 99 37 22",
+      sokeo:
+        "ផ្ទះលេខ ២០-២១-២២, ផ្លូវ ១២៣K, ភូមិត្រពាំងពោធ៍ សង្កាត់ចោមចៅ ខណ្ឌពោធ៍សែនជ័យ រាជធានីភ្នំពេញ\nលេខទូរស័ព្ទ 010/061 93 81 93",
+    },
+  },
+};
+
+export const sokhengInvoicePdfConfigKh = {
+  margin: 24,
+  spacing: 8,
+  khFont: "Khmer",
+  enFont: "Helvetica",
+  fancyKhFont: "Fancy-Khmer",
+  titleFontSize: 14,
+  normalFontSize: 10,
+  content: {
+    titleTextLine1: "វិក្ក័យបត្រ / Invoice",
+    titleTextLine2: "ឈ្មោះ / Name:",
+    nameLabel: "ឈ្មោះ / Name: ",
+    invoiceLabel: "លេខរៀងវិក្ក័យបត្រ:",
+    genderLabel: "ភេទ / Gender: ",
+    sexValue: {
+      male: "ប្រុស",
+      female: "ស្រី",
+    },
+    ageLabel: "អាយុ / Age: ",
+    ageValue: (age: number) => age + " ឆ្នាំ",
     dateLabel: "ថ្ងៃចេញវិក្ក័យបត្រ: ",
     prescriptionLabel: {
       header: [
@@ -168,5 +214,38 @@ export const signatureMetaData = {
   },
   huot_sothaly: {
     aspectRatio: 2.73,
+  },
+};
+
+export const clinicConfig = {
+  soksan: {
+    kh: {
+      prescriptionConfig: prescriptionPdfConfigKh,
+      invoiceConfig: invoicePdfConfigKh,
+    },
+    en: {
+      prescriptionConfig: prescriptionPdfConfigEn,
+      invoiceConfig: invoicePdfConfigEn,
+    },
+  },
+  sokeo: {
+    kh: {
+      prescriptionConfig: prescriptionPdfConfigKh,
+      invoiceConfig: invoicePdfConfigKh,
+    },
+    en: {
+      prescriptionConfig: prescriptionPdfConfigEn,
+      invoiceConfig: invoicePdfConfigEn,
+    },
+  },
+  sokheng: {
+    kh: {
+      prescriptionConfig: prescriptionPdfConfigKh,
+      invoiceConfig: sokhengInvoicePdfConfigKh,
+    },
+    en: {
+      prescriptionConfig: prescriptionPdfConfigEn,
+      invoiceConfig: invoicePdfConfigEn,
+    },
   },
 };

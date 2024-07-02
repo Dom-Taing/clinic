@@ -1,5 +1,6 @@
 import {
   Month,
+  clinicConfig,
   invoicePdfConfigEn,
   invoicePdfConfigKh,
   prescriptionPdfConfigEn,
@@ -77,12 +78,14 @@ function insertImage(
 
 export const createPrescriptionPdf = async (
   doc: any,
-  language: "kh" | "en",
+  language: "kh" | "en" = "kh",
   clinic: clinic,
   { prescription, name, sex, age, diagnosis, date, doctor }: Prescriptiondata
 ) => {
-  const { content, ...prescriptionPdfConfig } =
-    language === "kh" ? prescriptionPdfConfigKh : prescriptionPdfConfigEn;
+  let config =
+    clinicConfig[clinic.name as keyof typeof clinicConfig][language]
+      .prescriptionConfig || prescriptionPdfConfigKh;
+  const { content, ...prescriptionPdfConfig } = config;
   const {
     margin,
     spacing,
@@ -338,8 +341,10 @@ export const createInvoicePdf = async (
   clinic: clinic,
   { name, invoiceNo, sex, age, date, prescription, accountant }: InvoiceData
 ) => {
-  const { content, ...invoicePdfConfig } =
-    language === "kh" ? invoicePdfConfigKh : invoicePdfConfigEn;
+  let config =
+    clinicConfig[clinic.name as keyof typeof clinicConfig][language]
+      .invoiceConfig || invoicePdfConfigKh;
+  const { content, ...invoicePdfConfig } = config;
   const { margin, spacing, titleFontSize, normalFontSize } = invoicePdfConfig;
 
   // Define the title text
@@ -419,7 +424,7 @@ export const createInvoicePdf = async (
   xPos = pageWidth * 0.375;
   doc
     .font(invoicePdfConfig.khFont)
-    .text(`${content.ageLabel}${age}`, xPos)
+    .text(`${content.ageLabel}${content.ageValue(age)}`, xPos)
     .moveUp(1);
 
   xPos = pageWidth * 0.625;
