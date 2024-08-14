@@ -286,6 +286,17 @@ export const createPrescriptionPdf = async (
           align: "center",
           width: 120,
         });
+    } else if (doctor?.name === "Sok Pao") {
+      xPos = doc.page.width - 22 - 120;
+      yPos = doc.y;
+      doc
+        .fillColor("#242F91")
+        .font(prescriptionPdfConfig.titleFont)
+        .fontSize(15)
+        .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
+          align: "center",
+          width: 120,
+        });
     } else {
       doc
         .fillColor("#242F91")
