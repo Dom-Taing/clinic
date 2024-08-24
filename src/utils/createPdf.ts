@@ -271,6 +271,21 @@ export const createPrescriptionPdf = async (
           width: signatureWidth,
         }
       );
+    } else if (doctor?.name === "Nget SreyPov") {
+      const signatureWidth = 100;
+      xPos = doc.page.width - 32 - signatureWidth;
+      yPos = doc.y;
+      doc.image(
+        path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
+        xPos,
+        doc.y,
+        {
+          // fit: [signatureWidth, 50],
+          // valign: "center",
+          // align: "center",
+          width: signatureWidth,
+        }
+      );
     } else {
       const signatureWidth = 120;
       xPos = doc.page.width - 22 - signatureWidth;
