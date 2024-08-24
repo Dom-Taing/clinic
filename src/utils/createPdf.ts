@@ -256,20 +256,37 @@ export const createPrescriptionPdf = async (
       path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`)
     )
   ) {
-    const signatureWidth = 120;
-    xPos = doc.page.width - 22 - signatureWidth;
-    yPos = doc.y;
-    doc.image(
-      path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
-      xPos,
-      doc.y,
-      {
-        // fit: [signatureWidth, 50],
-        // valign: "center",
-        // align: "center",
-        width: signatureWidth,
-      }
-    );
+    if (doctor?.name === "Sok Pao") {
+      const signatureWidth = 110;
+      xPos = doc.page.width - 27 - signatureWidth;
+      yPos = doc.y;
+      doc.image(
+        path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
+        xPos,
+        doc.y,
+        {
+          // fit: [signatureWidth, 50],
+          // valign: "center",
+          // align: "center",
+          width: signatureWidth,
+        }
+      );
+    } else {
+      const signatureWidth = 120;
+      xPos = doc.page.width - 22 - signatureWidth;
+      yPos = doc.y;
+      doc.image(
+        path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
+        xPos,
+        doc.y,
+        {
+          // fit: [signatureWidth, 50],
+          // valign: "center",
+          // align: "center",
+          width: signatureWidth,
+        }
+      );
+    }
   }
 
   if (doctor?.name_kh) {
