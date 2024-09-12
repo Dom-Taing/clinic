@@ -256,7 +256,37 @@ export const createPrescriptionPdf = async (
       path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`)
     )
   ) {
-    if (doctor?.name === "Sok Pao") {
+    if (doctor?.name === "Chea Sokeo") {
+      const signatureWidth = 130;
+      xPos = doc.page.width - 17 - signatureWidth;
+      yPos = doc.y;
+      doc.image(
+        path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
+        xPos,
+        doc.y,
+        {
+          // fit: [signatureWidth, 50],
+          // valign: "center",
+          // align: "center",
+          width: signatureWidth,
+        }
+      );
+    } else if (doctor?.name === "Heng Fa") {
+      const signatureWidth = 120;
+      xPos = doc.page.width - 17 - signatureWidth;
+      yPos = doc.y;
+      doc.image(
+        path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
+        xPos,
+        doc.y,
+        {
+          // fit: [signatureWidth, 50],
+          // valign: "center",
+          // align: "center",
+          width: signatureWidth,
+        }
+      );
+    } else if (doctor?.name === "Sok Pao") {
       const signatureWidth = 110;
       xPos = doc.page.width - 27 - signatureWidth;
       yPos = doc.y;
@@ -325,6 +355,17 @@ export const createPrescriptionPdf = async (
         .fillColor("#242F91")
         .font(prescriptionPdfConfig.titleFont)
         .fontSize(15)
+        .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
+          align: "center",
+          width: 120,
+        });
+    } else if (doctor?.name === "Chea Sokeo" || doctor?.name === "Heng Fa") {
+      xPos = doc.page.width - 22 - 120;
+      yPos = doc.y;
+      doc
+        .fillColor("#242F91")
+        .font(prescriptionPdfConfig.titleFont)
+        .fontSize(14)
         .text(`${content.doctorTitle}${doctor.name_kh}`, xPos, yPos, {
           align: "center",
           width: 120,
