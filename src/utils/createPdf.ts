@@ -260,8 +260,8 @@ export const createPrescriptionPdf = async (
     )
   ) {
     if (doctor?.name === "Chea Sokeo") {
-      const signatureWidth = 130;
-      xPos = doc.page.width - 17 - signatureWidth;
+      const signatureWidth = 110;
+      xPos = doc.page.width - 27 - signatureWidth;
       yPos = doc.y;
       doc.image(
         path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
