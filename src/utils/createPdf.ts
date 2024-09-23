@@ -287,7 +287,7 @@ export const createPrescriptionPdf = async (
         }
       );
     } else if (doctor?.name === "Sok Pao") {
-      const signatureWidth = 110;
+      const signatureWidth = 100;
       xPos = doc.page.width - 27 - signatureWidth;
       yPos = doc.y;
       doc.image(
