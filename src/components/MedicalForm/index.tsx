@@ -418,7 +418,7 @@ const MedicalForm: React.FC<FormProps> = ({
                 <Autocomplete
                   disablePortal
                   options={usageList.map((item) => item.usage)}
-                  // freeSolo
+                  freeSolo
                   value={formData.usage}
                   onChange={(e, newValue) => {
                     onFormDataChange(e, "usage", newValue || "");
