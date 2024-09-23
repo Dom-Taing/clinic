@@ -92,9 +92,9 @@ const MedicalForm: React.FC<FormProps> = ({
     age: 0,
     diagnosis: "",
     medicine: "",
-    amount: 0,
-    unit: "",
-    usage: "",
+    amount: 10,
+    unit: unitOptions[0],
+    usage: "ព្រឹក 1គ្រាប់ _ ថ្ងៃ 1គ្រាប់ _ ល្ងាច 1គ្រាប់",
     addInto: "both",
     date: new Date().toISOString().split("T")[0],
   });
@@ -163,9 +163,9 @@ const MedicalForm: React.FC<FormProps> = ({
     setFormData({
       ...formData,
       medicine: "",
-      amount: 0,
-      unit: "",
-      usage: "",
+      amount: 10,
+      unit: unitOptions[0],
+      usage: "ព្រឹក 1គ្រាប់ _ ថ្ងៃ 1គ្រាប់ _ ល្ងាច 1គ្រាប់",
       addInto: "both",
     });
   };
@@ -182,9 +182,9 @@ const MedicalForm: React.FC<FormProps> = ({
       age: 0,
       diagnosis: "",
       medicine: "",
-      amount: 0,
-      unit: "",
-      usage: "",
+      amount: 10,
+      unit: unitOptions[0],
+      usage: "ព្រឹក 1គ្រាប់ _ ថ្ងៃ 1គ្រាប់ _ ល្ងាច 1គ្រាប់",
       addInto: "both",
       date: selectedDate,
     });
