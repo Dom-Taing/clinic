@@ -397,6 +397,9 @@ const MedicalForm: React.FC<FormProps> = ({
                     e.target.value = value.replace(/^0+/, "") || "";
                     onFormDataChange(e);
                   }}
+                  onFocus={(e) => {
+                    e.target.select();
+                  }}
                 />
               </Grid>
               <Grid item xs={3}>
