@@ -259,7 +259,22 @@ export const createPrescriptionPdf = async (
       path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`)
     )
   ) {
-    if (doctor?.name === "Chea Sokeo") {
+    if (doctor?.name === "Ban Thong Em") {
+      const signatureWidth = 100;
+      xPos = doc.page.width - 32 - signatureWidth;
+      yPos = doc.y;
+      doc.image(
+        path.resolve(`./public/signature/${getFileName(doctor?.name)}.png`),
+        xPos,
+        doc.y,
+        {
+          // fit: [signatureWidth, 50],
+          // valign: "center",
+          // align: "center",
+          width: signatureWidth,
+        }
+      );
+    } else if (doctor?.name === "Chea Sokeo") {
       const signatureWidth = 110;
       xPos = doc.page.width - 27 - signatureWidth;
       yPos = doc.y;
