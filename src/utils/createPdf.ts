@@ -227,7 +227,7 @@ export const createPrescriptionPdf = async (
     startX += columnWidth[0];
     doc
       .font(prescriptionPdfConfig.khFont)
-      .text(`${item.amount.toString()} ${item.unit}`, startX, startY, {
+      .text(`${item.amount.toString()} ${item.unit || ""}`, startX, startY, {
         align: "left",
         width: columnWidth[1],
       });
