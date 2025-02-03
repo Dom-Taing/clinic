@@ -96,6 +96,30 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   doc.pipe(res);
   doc.registerFont("Khmer", path.resolve("./public/Khmer-Regular.ttf"));
   doc.registerFont("Fancy-Khmer", path.resolve("./public/Moul-Regular.ttf"));
+
+  await createPrescriptionPdf(doc, "kh", clinic, {
+    prescription: prescription.filter(
+      (prescription: any) =>
+        prescription.addInto === "prescription" ||
+        prescription.addInto === "both"
+    ),
+    name: name,
+    sex: sex,
+    age: age,
+    diagnosis: diagnosis,
+    date: date,
+    doctor: doctor,
+  });
+  doc.addPage({
+    margins: {
+      left: 45,
+      right: 45,
+      top: 22,
+      bottom: 22,
+    },
+    size: "A5",
+  });
+
   await createPrescriptionPdf(doc, "kh", clinic, {
     prescription: prescription.filter(
       (prescription: any) =>
