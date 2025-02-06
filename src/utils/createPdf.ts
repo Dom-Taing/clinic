@@ -626,7 +626,7 @@ export const createInvoicePdf = async (
 
   // signature
   const signatureWidth = 150;
-  const signatureHeight = 50;
+  const signatureHeight = 75;
   if (
     fs.existsSync(
       path.resolve(`./public/signature/${getFileName(accountant?.name)}.png`)
@@ -639,7 +639,7 @@ export const createInvoicePdf = async (
       xPos,
       yPos,
       {
-        fit: [signatureWidth, 50],
+        fit: [signatureWidth, 75],
         valign: "bottom",
         align: "center",
       }
