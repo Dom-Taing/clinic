@@ -61,7 +61,14 @@ export const formLabelKh = {
   date: "កាលបរិច្ឆេទ",
 };
 
-export const unitOptions = ["គ្រាប់", "កញ្ចប់", "អំពូល", "ដប", "ប្រអប់"];
+export const unitOptions = [
+  "គ្រាប់",
+  "កញ្ចប់",
+  "អំពូល",
+  "ដប",
+  "ប្រអប់",
+  "បន្ទះ",
+];
 
 export enum Org {
   Soksan = "soksan",
