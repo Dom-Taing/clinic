@@ -118,6 +118,29 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     date: date,
     doctor: doctor,
   });
+  doc.addPage({
+    margins: {
+      left: 45,
+      right: 45,
+      top: 22,
+      bottom: 22,
+    },
+    size: "A5",
+  });
+
+  await createPrescriptionPdf(doc, "kh", clinic, {
+    prescription: prescription.filter(
+      (prescription: any) =>
+        prescription.addInto === "prescription" ||
+        prescription.addInto === "both"
+    ),
+    name: name,
+    sex: sex,
+    age: age,
+    diagnosis: diagnosis,
+    date: date,
+    doctor: doctor,
+  });
   doc.addPage({ margin: 24, size: "A5" });
 
   await createInvoicePdf(doc, "kh", clinic, {
