@@ -128,7 +128,7 @@ export const createPrescriptionPdf = async (
     .font(prescriptionPdfConfig.khFont)
     .text(`${content.nameLabel}${name}`)
     .moveUp(1);
-  xPos = pageWidth / 2;
+  xPos = pageWidth / 2 + 35;
   doc
     .font(prescriptionPdfConfig.khFont)
     .text(
