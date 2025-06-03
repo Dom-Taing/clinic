@@ -174,7 +174,7 @@ const MedicalForm: React.FC<FormProps> = ({
     setPrescriptions(prescriptions.filter((_, i) => i !== index));
   };
 
-  const onClickFormCancel = () => {
+  const resetForm = () => {
     const selectedDate = formData.date;
     setFormData({
       name: "",
@@ -189,6 +189,10 @@ const MedicalForm: React.FC<FormProps> = ({
       date: selectedDate,
     });
     setPrescriptions([]);
+  };
+
+  const onClickFormCancel = () => {
+    resetForm();
   };
 
   const onClickSubmit = async () => {
@@ -214,11 +218,12 @@ const MedicalForm: React.FC<FormProps> = ({
       const blob = new Blob([response.data], { type: "application/pdf" });
       const pdfUrl = URL.createObjectURL(blob);
 
-      printJS.current({
+      await printJS.current({
         printable: pdfUrl,
         type: "pdf",
         onPrintDialogClose: () => {
           URL.revokeObjectURL(pdfUrl);
+          resetForm();
         },
       });
       setError({ ...error, general: "" });
