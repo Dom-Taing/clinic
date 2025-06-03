@@ -37,7 +37,13 @@ export default function Home({ clinic }: HomeProps) {
         <h1 style={{ margin: "1rem" }}>Report</h1>
         <Wrapper>
           {clinic.map((clinic) => (
-            <StyledPaper key={clinic.id} elevation={2}>
+            <StyledPaper
+              key={clinic.id}
+              elevation={2}
+              onClick={() => {
+                window.location.href = `/${clinic.name}`;
+              }}
+            >
               <Link href={`/report/${clinic.name}`}>{clinic.name}</Link>
             </StyledPaper>
           ))}
