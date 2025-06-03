@@ -80,6 +80,7 @@ export default function ReportForm() {
       });
     } catch (error) {
       console.log("Error generating image or sending to Telegram:", error);
+      console.log("error");
     }
   };
 
