@@ -41,7 +41,7 @@ export default function Home({ clinic }: HomeProps) {
               key={clinic.id}
               elevation={2}
               onClick={() => {
-                window.location.href = `/${clinic.name}`;
+                window.location.href = `/report/${clinic.name}`;
               }}
             >
               <Link href={`/report/${clinic.name}`}>{clinic.name}</Link>
