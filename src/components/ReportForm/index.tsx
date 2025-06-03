@@ -75,9 +75,28 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
   };
 
   const resetForm = () => {
-    setFormValue([]);
+    setFormValue([
+      { label: translation.general, value: "0" },
+      { label: translation.male, value: "0" },
+      { label: translation.government, value: "0" },
+      { label: translation.selfEmployed, value: "0" },
+      { label: translation.dependent, value: "0" },
+      { label: translation.research, value: "0" },
+      { label: translation.workInjury, value: "0" },
+      { label: translation.stayIn, value: "0" },
+      { label: translation.total, value: "0" },
+      { label: translation.moneyTotal, value: "0" },
+      { label: translation.picture, value: "0" },
+      ...medicineList.map((medicine) => ({
+        label: medicine,
+        value: "0",
+      })),
+    ]);
     setLabelInput("");
     setValueInput("");
+    setDoctorInput("");
+    setDoctorValue("");
+    setScan(false);
   };
 
   const handleSubmit = async () => {
