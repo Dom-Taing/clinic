@@ -4,16 +4,22 @@ import ReportForm from "@/components/ReportForm";
 import { getCookieValue } from "@/utils/parseCookie";
 import { GetServerSideProps } from "next";
 import { createSupaClient } from "@/service/supa";
+import ReportFormTest from "@/components/ReportForm/reportForm";
 const inter = Inter({ subsets: ["latin"] });
 
 interface ReportProps {
   doctorList: { id: string; name: string }[];
+  clinic: string;
 }
 
-export default function Report({ doctorList }: ReportProps) {
+export default function Report({ doctorList, clinic }: ReportProps) {
   return (
     <main className={`${styles.main} ${inter.className}`}>
-      <ReportForm doctorList={doctorList.map((entry) => entry.name)} />
+      {/* <ReportForm doctorList={doctorList.map((entry) => entry.name)} /> */}
+      <ReportFormTest
+        doctorList={doctorList.map((entry) => entry.name)}
+        clinic={clinic}
+      />
     </main>
   );
 }
@@ -51,12 +57,14 @@ export const getServerSideProps: GetServerSideProps<ReportProps> = async (
     return {
       props: {
         doctorList: doctor || [],
+        clinic,
       },
     };
   } catch {
     return {
       props: {
         doctorList: [],
+        clinic: "",
       },
     };
   }
