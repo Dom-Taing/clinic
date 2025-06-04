@@ -30,11 +30,9 @@ interface ReportFormProps {
 export default function ReportForm({ doctorList }: ReportFormProps) {
   const [formValue, setFormValue] = useState<FormEntry[]>([
     { label: translation.general, value: "0" },
-    { label: translation.male, value: "0" },
+    { label: translation.worker, value: "0" },
     { label: translation.government, value: "0" },
     { label: translation.selfEmployed, value: "0" },
-    { label: translation.dependent, value: "0" },
-    { label: translation.research, value: "0" },
     { label: translation.workInjury, value: "0" },
     { label: translation.stayIn, value: "0" },
     { label: translation.total, value: "0" },
@@ -45,6 +43,7 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
       value: "0",
     })),
   ]);
+  const [doctorForm, setDoctorForm] = useState<FormEntry[]>([]);
   const [labelInput, setLabelInput] = useState("");
   const [valueInput, setValueInput] = useState("");
   const [doctorInput, setDoctorInput] = useState("");
@@ -64,7 +63,7 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
   const handleAddDoctor = () => {
     if (doctorInput && doctorValue) {
       const newEntry = { label: doctorInput, value: doctorValue };
-      setFormValue((prev) => [...prev, newEntry]);
+      setDoctorForm((prev) => [...prev, newEntry]);
       setDoctorInput("");
       setDoctorValue("");
     }
@@ -77,11 +76,9 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
   const resetForm = () => {
     setFormValue([
       { label: translation.general, value: "0" },
-      { label: translation.male, value: "0" },
+      { label: translation.worker, value: "0" },
       { label: translation.government, value: "0" },
       { label: translation.selfEmployed, value: "0" },
-      { label: translation.dependent, value: "0" },
-      { label: translation.research, value: "0" },
       { label: translation.workInjury, value: "0" },
       { label: translation.stayIn, value: "0" },
       { label: translation.total, value: "0" },
@@ -158,9 +155,20 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
   };
 
   const updateScan = (value: boolean) => {
-    if (!scan) {
+    if (value) {
       const removed = formValue.filter((entry) => entry.label !== "នៅសល់");
       setFormValue(removed);
+    } else {
+      setFormValue((prev) => {
+        const existingEntry = prev.find((entry) => entry.label === "នៅសល់");
+        if (existingEntry) {
+          return prev.map((entry) =>
+            entry.label === "នៅសល់" ? { ...entry, value: "0" } : entry
+          );
+        } else {
+          return [...prev, { label: "នៅសល់", value: "0" }];
+        }
+      });
     }
     setScan(value);
   };
@@ -168,6 +176,8 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
   const getUnit = (label: string) => {
     if (label === "Eva" || label === "Meuri") {
       return "ប្រអប់";
+    } else if (label === translation.moneyTotal) {
+      return "៛";
     }
     return "នាក់";
   };
@@ -386,32 +396,70 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
         </FormControl>
       </Paper>
       <div
-        id="data-table"
         style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "2rem",
           backgroundColor: "white",
-          fontSize: "2rem",
-          minHeight: "200px",
-          padding: "3rem",
         }}
       >
-        {formValue.map((entry, index) => (
-          <div
-            key={index}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-              alignItems: "center",
-              gap: "1rem",
-            }}
-          >
-            <span style={{ textAlign: "left" }}>{entry.label}</span>{" "}
-            <span>:</span>
-            <span style={{ textAlign: "left" }}>
-              {entry.value}
-              {getUnit(entry.label)}
-            </span>{" "}
-          </div>
-        ))}
+        <div
+          id="data-table"
+          style={{
+            backgroundColor: "white",
+            fontSize: "2rem",
+            minHeight: "200px",
+            padding: "3rem",
+          }}
+        >
+          {formValue.map((entry, index) => (
+            <div
+              key={index}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
+                alignItems: "center",
+                gap: "1rem",
+              }}
+            >
+              <span style={{ textAlign: "left" }}>{entry.label}</span>{" "}
+              <span>:</span>
+              <span style={{ textAlign: "left" }}>
+                {entry.value}
+                {getUnit(entry.label)}
+              </span>{" "}
+            </div>
+          ))}
+          {scan && <div>ស្កេនរួច</div>}
+        </div>
+        <div
+          id="data-table"
+          style={{
+            backgroundColor: "white",
+            fontSize: "2rem",
+            minHeight: "200px",
+            padding: "3rem",
+          }}
+        >
+          {doctorForm.map((entry, index) => (
+            <div
+              key={index}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
+                alignItems: "center",
+                gap: "1rem",
+              }}
+            >
+              <span style={{ textAlign: "left" }}>Dr.{entry.label}</span>{" "}
+              <span>:</span>
+              <span style={{ textAlign: "left" }}>
+                {entry.value}
+                {getUnit(entry.label)}
+              </span>{" "}
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
