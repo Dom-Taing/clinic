@@ -477,7 +477,8 @@ export default function ReportFormTest({
               display: "grid",
               gridTemplateColumns: "1fr auto auto", // Define three columns: left, middle, right
               alignItems: "center",
-              gap: "1rem",
+              rowGap: "0",
+              columnGap: "1rem",
             }}
           >
             <span style={{ textAlign: "left" }}>ជំងឺប.ស.ស</span>
