@@ -181,7 +181,7 @@ export default function ReportFormTest({
                 type="number"
                 label="កម្មករ"
                 fullWidth
-                name="workder"
+                name="worker"
                 onChange={handleInputChange}
               />
             </Grid>
@@ -190,7 +190,7 @@ export default function ReportFormTest({
                 type="number"
                 label="មន្ត្រី"
                 fullWidth
-                name="goverment"
+                name="government"
                 onChange={handleInputChange}
               />
             </Grid>
@@ -457,6 +457,7 @@ export default function ReportFormTest({
             fontWeight: "bold",
             fontSize: "3rem",
             gap: "1rem",
+            justifyContent: "center",
           }}
         >
           <div>{formState.date}</div>
@@ -468,266 +469,150 @@ export default function ReportFormTest({
             flexDirection: "row",
             gap: "5rem",
             justifyContent: "space-between",
+            marginTop: "2rem",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr auto auto", // Define three columns: left, middle, right
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <span style={{ textAlign: "left" }}>ជំងឺប.ស.ស</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>
+              {formState.insuredPatient} នាក់
+            </span>{" "}
+            <span style={{ textAlign: "left" }}>កម្មករ</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>
+              {formState.worker} នាក់
+            </span>{" "}
+            <span style={{ textAlign: "left" }}>មន្ត្រី</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>
+              {formState.government} នាក់
+            </span>{" "}
+            <span style={{ textAlign: "left" }}>ស្វ័យនិយោជន៍</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>
+              {formState.dependent} នាក់
+            </span>{" "}
+            <span style={{ textAlign: "left" }}>គ្រោះថ្នាក់ការងារ</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>
+              {formState.workplaceIncident} នាក់
+            </span>{" "}
+            <span style={{ textAlign: "left" }}>សំរាកពេទ្យ</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>
+              {formState.insuredStayOver} នាក់
+            </span>{" "}
+            <span style={{ textAlign: "left" }}>ជំងឺទូទៅ</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>
+              {formState.general} នាក់
+            </span>{" "}
+            <span style={{ textAlign: "left" }}>ដេកពេទ្យ</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>
+              {formState.generalStayOver} នាក់
+            </span>{" "}
+            <span style={{ textAlign: "left" }}>ចំណូល</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>{formState.income}</span>{" "}
+            <span style={{ textAlign: "left" }}>ABA</span>
+            <span>:</span>
+            <span style={{ textAlign: "left" }}>{formState.ABA}</span>{" "}
+          </div>
+          <div>
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
+                gridTemplateColumns: "1fr auto auto", // Define three columns: left, middle, right
                 alignItems: "center",
-                gap: "1rem",
+                columnGap: "1rem",
+                rowGap: "0",
               }}
             >
-              <span style={{ textAlign: "left" }}>ជំងឺប.ស.ស</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.insuredPatient}នាក់
-              </span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>កម្មករ</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.worker}នាក់
-              </span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>មន្ត្រី</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.government}នាក់
-              </span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>ស្វ័យនិយោជន៍</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.dependent}នាក់
-              </span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>គ្រោះថ្នាក់ការងារ</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.workplaceIncident}នាក់
-              </span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>សំរាកពេទ្យ</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.insuredStayOver}នាក់
-              </span>{" "}
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>ជំងឺទូទៅ</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.general}នាក់
-              </span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>ដេកពេទ្យ</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.generalStayOver}នាក់
-              </span>{" "}
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>ចំណូល</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>{formState.income}</span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>ABA</span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>{formState.ABA}</span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
+              {doctorEntries.map((entry, index) => (
+                <>
+                  <span style={{ textAlign: "left" }}>Dr.{entry.label}</span>
+                  <span>:</span>
+                  <span style={{ textAlign: "left" }}>
+                    {entry.value} នាក់
+                  </span>{" "}
+                </>
+              ))}
               <span style={{ textAlign: "left" }}>Echo</span>
               <span>:</span>
               <span style={{ textAlign: "left" }}>
-                {formState.Echo}នាក់
+                {formState.Echo} នាក់
               </span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
               <span style={{ textAlign: "left" }}>Eva</span>
               <span>:</span>
               <span style={{ textAlign: "left" }}>
-                {formState.Eva}ប្រអប់
+                {formState.Eva} ប្រអប់
               </span>{" "}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
               <span style={{ textAlign: "left" }}>Meuri</span>
               <span>:</span>
               <span style={{ textAlign: "left" }}>
-                {formState.Meuri}ប្រអប់
+                {formState.Meuri} ប្រអប់
               </span>{" "}
             </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
-              <span style={{ textAlign: "left" }}>
-                ស្កេនមេដៃអត់ជាប់ (រូបថត)
-              </span>
-              <span>:</span>
-              <span style={{ textAlign: "left" }}>
-                {formState.picture}នាក់
-              </span>{" "}
-            </div>
-
-            {scan ? (
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="exampleCheckbox"
-                    value="checkedValue"
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      marginRight: "10px",
-                    }}
-                    checked={scan}
-                  />
-                  ស្កេនរួច
-                </label>
-              </div>
-            ) : (
-              <div
-                style={{ display: "flex", flexDirection: "row", gap: "3rem" }}
-              >
-                <label>
-                  <input
-                    type="checkbox"
-                    name="exampleCheckbox"
-                    value="checkedValue"
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      marginRight: "10px",
-                    }}
-                    checked={!scan}
-                  />
-                  សល់
-                </label>
-
-                {!scan && <div>{formState.scan}នាក់</div>}
-              </div>
-            )}
           </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            marginTop: "2rem",
+          }}
+        >
           <div>
-            {doctorEntries.map((entry, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                  alignItems: "center",
-                  gap: "1rem",
-                }}
-              >
-                <span style={{ textAlign: "left" }}>Dr.{entry.label}</span>
-                <span>:</span>
-                <span style={{ textAlign: "left" }}>
-                  {entry.value}នាក់
-                </span>{" "}
-              </div>
-            ))}
+            <span>ស្កេនមេដៃអត់ជាប់ (រូបថត): {formState.picture} នាក់</span>
           </div>
+          {scan ? (
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  name="exampleCheckbox"
+                  value="checkedValue"
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    marginRight: "10px",
+                  }}
+                  checked={scan}
+                />
+                ស្កេនរួច
+              </label>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "row", gap: "3rem" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="exampleCheckbox"
+                  value="checkedValue"
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    marginRight: "10px",
+                  }}
+                  checked={!scan}
+                />
+                សល់
+              </label>
+
+              {!scan && <div>{formState.scan} នាក់</div>}
+            </div>
+          )}
         </div>
       </div>
     </>
