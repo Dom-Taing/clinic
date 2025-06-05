@@ -443,25 +443,34 @@ export default function ReportFormTest({
         </FormControl>
       </Paper>
       <div
-        style={{ backgroundColor: "white", fontSize: "2rem", padding: "5rem" }}
+        style={{
+          backgroundColor: "white",
+          fontSize: "2rem",
+          padding: "3rem",
+        }}
         id="report-form"
       >
-        <ol
+        <div
           style={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
+            fontWeight: "bold",
+            fontSize: "3rem",
             gap: "1rem",
           }}
         >
-          <li>
-            <div
-              style={{ display: "flex", flexDirection: "row", gap: "10rem" }}
-            >
-              <div>{formState.date}</div>
-              <div>{clinic}</div>
-            </div>
-          </li>
-          <li>
+          <div>{formState.date}</div>
+          <div>Clinic {clinic}</div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "5rem",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <div
               style={{
                 display: "grid",
@@ -546,8 +555,7 @@ export default function ReportFormTest({
                 {formState.insuredStayOver}នាក់
               </span>{" "}
             </div>
-          </li>
-          <li>
+
             <div
               style={{
                 display: "grid",
@@ -576,8 +584,7 @@ export default function ReportFormTest({
                 {formState.generalStayOver}នាក់
               </span>{" "}
             </div>
-          </li>
-          <li>
+
             <div
               style={{
                 display: "grid",
@@ -602,25 +609,6 @@ export default function ReportFormTest({
               <span>:</span>
               <span style={{ textAlign: "left" }}>{formState.ABA}</span>{" "}
             </div>
-          </li>
-          <li>
-            {doctorEntries.map((entry, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
-                  alignItems: "center",
-                  gap: "1rem",
-                }}
-              >
-                <span style={{ textAlign: "left" }}>Dr.{entry.label}</span>
-                <span>:</span>
-                <span style={{ textAlign: "left" }}>
-                  {entry.value}នាក់
-                </span>{" "}
-              </div>
-            ))}
             <div
               style={{
                 display: "grid",
@@ -663,8 +651,7 @@ export default function ReportFormTest({
                 {formState.Meuri}ប្រអប់
               </span>{" "}
             </div>
-          </li>
-          <li>
+
             <div
               style={{
                 display: "grid",
@@ -681,36 +668,67 @@ export default function ReportFormTest({
                 {formState.picture}នាក់
               </span>{" "}
             </div>
-          </li>
-          <li>
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  name="exampleCheckbox"
-                  value="checkedValue"
-                  style={{ width: "20px", height: "20px", marginRight: "10px" }}
-                  checked={scan}
-                />
-                រួច
-              </label>
-            </div>
-            <div style={{ display: "flex", flexDirection: "row", gap: "3rem" }}>
-              <label>
-                <input
-                  type="checkbox"
-                  name="exampleCheckbox"
-                  value="checkedValue"
-                  style={{ width: "20px", height: "20px", marginRight: "10px" }}
-                  checked={!scan}
-                />
-                សល់
-              </label>
 
-              {!scan && <div>{formState.scan}នាក់</div>}
-            </div>
-          </li>
-        </ol>
+            {scan ? (
+              <div>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="exampleCheckbox"
+                    value="checkedValue"
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      marginRight: "10px",
+                    }}
+                    checked={scan}
+                  />
+                  ស្កេនរួច
+                </label>
+              </div>
+            ) : (
+              <div
+                style={{ display: "flex", flexDirection: "row", gap: "3rem" }}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    name="exampleCheckbox"
+                    value="checkedValue"
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      marginRight: "10px",
+                    }}
+                    checked={!scan}
+                  />
+                  សល់
+                </label>
+
+                {!scan && <div>{formState.scan}នាក់</div>}
+              </div>
+            )}
+          </div>
+          <div>
+            {doctorEntries.map((entry, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr auto 1fr", // Define three columns: left, middle, right
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              >
+                <span style={{ textAlign: "left" }}>Dr.{entry.label}</span>
+                <span>:</span>
+                <span style={{ textAlign: "left" }}>
+                  {entry.value}នាក់
+                </span>{" "}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );
