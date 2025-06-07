@@ -15,9 +15,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { toPng } from "html-to-image";
 import axios from "axios";
 
-interface FormEntry {
-  label: string;
-  value: string;
+interface DoctorEntry {
+  doctorName: string;
+  numPatient: string;
+  nightPatient: string;
 }
 
 interface ReportFormProps {
@@ -47,10 +48,11 @@ export default function ReportFormTest({
     picture: "",
     scan: "",
   });
-  const [doctorEntries, setDoctorEntries] = useState<FormEntry[]>([]);
-  const [doctorForm, setDoctorForm] = useState({
-    label: "",
-    value: "",
+  const [doctorEntries, setDoctorEntries] = useState<DoctorEntry[]>([]);
+  const [doctorForm, setDoctorForm] = useState<DoctorEntry>({
+    doctorName: "",
+    numPatient: "",
+    nightPatient: "",
   });
   const [scan, updateScan] = useState(false);
 
@@ -84,12 +86,13 @@ export default function ReportFormTest({
   };
 
   const handleAddDoctor = () => {
-    const newEntry: FormEntry = {
-      label: doctorForm.label,
-      value: doctorForm.value,
+    const newEntry: DoctorEntry = {
+      doctorName: doctorForm.doctorName,
+      numPatient: doctorForm.numPatient,
+      nightPatient: doctorForm.nightPatient,
     };
     setDoctorEntries((prevEntries) => [...prevEntries, newEntry]);
-    setDoctorForm({ label: "", value: "" });
+    setDoctorForm({ doctorName: "", numPatient: "", nightPatient: "" }); // Reset the form after adding
   };
 
   const handleDeleteDoctor = (index: number) => {
@@ -269,16 +272,16 @@ export default function ReportFormTest({
             <Grid item xs={12}>
               <h2>គ្រូពេទ្យ</h2>{" "}
             </Grid>
-            <Grid item xs={5}>
+            <Grid item xs={4}>
               <Autocomplete
                 disablePortal
                 options={doctorList}
                 autoSelect
-                value={doctorForm.label}
+                value={doctorForm.doctorName}
                 onChange={(e, newValue) => {
                   setDoctorForm((prev) => ({
                     ...prev,
-                    label: newValue || "",
+                    doctorName: newValue || "",
                   }));
                 }}
                 renderInput={(params) => (
@@ -286,17 +289,32 @@ export default function ReportFormTest({
                 )}
               />
             </Grid>
-            <Grid item xs={5}>
+            <Grid item xs={3}>
               <TextField
                 type="number"
-                label="Enter Value"
+                label="Number of Patients"
                 variant="outlined"
                 fullWidth
-                value={doctorForm.value}
+                value={doctorForm.numPatient}
                 onChange={(e) =>
                   setDoctorForm((prev) => ({
                     ...prev,
-                    value: e.target.value,
+                    numPatient: e.target.value,
+                  }))
+                }
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                type="number"
+                label="Night Patients"
+                variant="outlined"
+                fullWidth
+                value={doctorForm.nightPatient}
+                onChange={(e) =>
+                  setDoctorForm((prev) => ({
+                    ...prev,
+                    nightPatient: e.target.value,
                   }))
                 }
               />
@@ -355,7 +373,7 @@ export default function ReportFormTest({
             <Grid item xs={12}>
               <h2>ស្កេន</h2>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -366,7 +384,7 @@ export default function ReportFormTest({
                     color="primary" // Optional: Set the color
                   />
                 }
-                label="ស្កេន"
+                label="ស្កេនរួច"
               />
             </Grid>
             <Grid item xs={1}>
@@ -398,13 +416,15 @@ export default function ReportFormTest({
             <Grid item xs={12}>
               <DataTable
                 header={[
-                  { display: "label", key: "label" },
-                  { display: "value", key: "value" },
+                  { display: "Doctor", key: "doctorName" },
+                  { display: "Number Patient", key: "numPatient" },
+                  { display: "Night Patient", key: "nightPatient" },
                   { display: "action", key: "action" },
                 ]}
                 data={doctorEntries.map((entry, index) => ({
-                  label: entry.label,
-                  value: entry.value,
+                  doctorName: entry.doctorName,
+                  numPatient: entry.numPatient,
+                  nightPatient: entry.nightPatient,
                   action: (
                     <IconButton
                       aria-label="delete"
@@ -532,7 +552,7 @@ export default function ReportFormTest({
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr auto auto", // Define three columns: left, middle, right
+                gridTemplateColumns: "1fr auto auto auto", // Define three columns: left, middle, right
                 alignItems: "center",
                 columnGap: "1rem",
                 rowGap: "0",
@@ -540,11 +560,14 @@ export default function ReportFormTest({
             >
               {doctorEntries.map((entry, index) => (
                 <>
-                  <span style={{ textAlign: "left" }}>Dr.{entry.label}</span>
+                  <span style={{ textAlign: "left" }}>
+                    Dr.{entry.doctorName}
+                  </span>
                   <span>:</span>
                   <span style={{ textAlign: "left" }}>
-                    {entry.value} នាក់
+                    {entry.numPatient} នាក់
                   </span>{" "}
+                  <span>(យប់: {entry.nightPatient} នាក់)</span>
                 </>
               ))}
               <span style={{ textAlign: "left" }}>Echo</span>
@@ -552,16 +575,19 @@ export default function ReportFormTest({
               <span style={{ textAlign: "left" }}>
                 {formState.Echo} នាក់
               </span>{" "}
+              <span></span>
               <span style={{ textAlign: "left" }}>Eva</span>
               <span>:</span>
               <span style={{ textAlign: "left" }}>
                 {formState.Eva} ប្រអប់
               </span>{" "}
+              <span></span>
               <span style={{ textAlign: "left" }}>Meuri</span>
               <span>:</span>
               <span style={{ textAlign: "left" }}>
                 {formState.Meuri} ប្រអប់
               </span>{" "}
+              <span></span>
             </div>
           </div>
         </div>
