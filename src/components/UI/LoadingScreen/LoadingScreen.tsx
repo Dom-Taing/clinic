@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { CircularProgress } from "@mui/material";
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -17,6 +17,8 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: "100vh"; // Full screen height
+  z-index: 9999; /* Ensures it appears above other elements */
 `;
 
 interface LoadingScreenProps {

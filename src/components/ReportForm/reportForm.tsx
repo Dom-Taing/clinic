@@ -14,6 +14,7 @@ import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toPng } from "html-to-image";
 import axios from "axios";
+import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
 
 interface DoctorEntry {
   doctorName: string;
@@ -21,8 +22,13 @@ interface DoctorEntry {
   nightPatient: string;
 }
 
+interface DoctorData {
+  id: string;
+  name: string;
+}
+
 interface ReportFormProps {
-  doctorList: string[];
+  doctorList: DoctorData[];
   clinic: string;
 }
 
@@ -31,7 +37,7 @@ export default function ReportFormTest({
   clinic,
 }: ReportFormProps) {
   const [formState, setFormState] = useState({
-    date: new Date().toISOString().split("T")[0],
+    date: new Date().toLocaleDateString("en-CA"), // Format as YYYY-MM-DD
     insuredPatient: "",
     worker: "",
     government: "",
@@ -55,6 +61,7 @@ export default function ReportFormTest({
     nightPatient: "",
   });
   const [scan, updateScan] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -103,12 +110,25 @@ export default function ReportFormTest({
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const tableElement = document.getElementById("report-form");
       if (!tableElement) {
         console.error("Table element not found");
         return;
       }
 
+      const entriesToInsert = doctorEntries.map((entry) => ({
+        doctor_name: entry.doctorName,
+        total_patient: entry.numPatient,
+        night_patient: entry.nightPatient,
+        user_id: doctorList.find((doctor) => doctor.name === entry.doctorName)
+          ?.id,
+        date: formState.date, // Include the date in each entry
+      }));
+
+      const response = await axios.post("/api/report", {
+        entriesToInsert,
+      });
       // Convert the table to an image
       const image = await toPng(tableElement);
 
@@ -140,11 +160,15 @@ export default function ReportFormTest({
     } catch (error) {
       console.log("Error generating image or sending to Telegram:", error);
       console.log("error");
+      alert("Error occured");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
+      <LoadingScreen isOn={loading} />
       <Paper
         elevation={2}
         sx={{ padding: 2, minWidth: 500, maxWidth: 1000, marginBottom: 4 }}
@@ -275,7 +299,7 @@ export default function ReportFormTest({
             <Grid item xs={4}>
               <Autocomplete
                 disablePortal
-                options={doctorList}
+                options={doctorList.map((doctor) => doctor.name)}
                 autoSelect
                 value={doctorForm.doctorName}
                 onChange={(e, newValue) => {
@@ -616,6 +640,7 @@ export default function ReportFormTest({
                     marginRight: "10px",
                   }}
                   checked={scan}
+                  onChange={() => {}}
                 />
                 ស្កេនរួច
               </label>
@@ -633,6 +658,7 @@ export default function ReportFormTest({
                     marginRight: "10px",
                   }}
                   checked={!scan}
+                  onChange={() => {}}
                 />
                 សល់
               </label>

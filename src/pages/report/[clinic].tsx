@@ -16,10 +16,7 @@ export default function Report({ doctorList, clinic }: ReportProps) {
   return (
     <main className={`${styles.main} ${inter.className}`}>
       {/* <ReportForm doctorList={doctorList.map((entry) => entry.name)} /> */}
-      <ReportFormTest
-        doctorList={doctorList.map((entry) => entry.name)}
-        clinic={clinic}
-      />
+      <ReportFormTest doctorList={doctorList} clinic={clinic} />
     </main>
   );
 }
