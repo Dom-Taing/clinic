@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 // Initialize Supabase client with the Service Role Key
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+  process.env.SUPA_URL || "",
   process.env.SUPA_KEY || "" // Use the Service Role Key
 );
 
