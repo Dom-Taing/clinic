@@ -111,6 +111,7 @@ export default function ReportFormTest({
   const handleSubmit = async () => {
     try {
       setLoading(true);
+      await document.fonts.ready;
       const tableElement = document.getElementById("report-form");
       if (!tableElement) {
         console.error("Table element not found");
@@ -496,16 +497,12 @@ export default function ReportFormTest({
       >
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
             fontWeight: "bold",
             fontSize: "3rem",
-            gap: "1rem",
-            justifyContent: "center",
+            textAlign: "center",
           }}
         >
-          <div>{formState.date}</div>
-          <div>Clinic {clinic}</div>
+          {formState.date} Clinic {clinic}
         </div>
         <div
           style={{
