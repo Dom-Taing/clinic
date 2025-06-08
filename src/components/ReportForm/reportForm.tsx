@@ -119,8 +119,8 @@ export default function ReportFormTest({
 
       const entriesToInsert = doctorEntries.map((entry) => ({
         doctor_name: entry.doctorName,
-        total_patient: entry.numPatient,
-        night_patient: entry.nightPatient,
+        total_patient: entry.numPatient || "0",
+        night_patient: entry.nightPatient || "0",
         user_id: doctorList.find((doctor) => doctor.name === entry.doctorName)
           ?.id,
         date: formState.date, // Include the date in each entry
