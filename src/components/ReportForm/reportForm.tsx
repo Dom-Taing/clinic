@@ -579,18 +579,6 @@ export default function ReportFormTest({
                 rowGap: "0",
               }}
             >
-              {doctorEntries.map((entry, index) => (
-                <>
-                  <span style={{ textAlign: "left" }}>
-                    Dr.{entry.doctorName}
-                  </span>
-                  <span>:</span>
-                  <span style={{ textAlign: "left" }}>
-                    {entry.numPatient} នាក់
-                  </span>{" "}
-                  <span>(យប់: {entry.nightPatient} នាក់)</span>
-                </>
-              ))}
               <span style={{ textAlign: "left" }}>Echo</span>
               <span>:</span>
               <span style={{ textAlign: "left" }}>
@@ -609,6 +597,18 @@ export default function ReportFormTest({
                 {formState.Meuri} ប្រអប់
               </span>{" "}
               <span></span>
+              {doctorEntries.map((entry, index) => (
+                <>
+                  <span style={{ textAlign: "left" }}>
+                    Dr.{entry.doctorName}
+                  </span>
+                  <span>:</span>
+                  <span style={{ textAlign: "left" }}>
+                    {entry.numPatient} នាក់
+                  </span>{" "}
+                  <span>(យប់: {entry.nightPatient} នាក់)</span>
+                </>
+              ))}
             </div>
           </div>
         </div>
