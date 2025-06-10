@@ -118,6 +118,17 @@ export default function ReportFormTest({
         return;
       }
 
+      // Validate form data
+      if (
+        doctorEntries.reduce(
+          (acc, entry) => acc + parseInt(entry.numPatient || "0", 10),
+          0
+        ) !== parseInt(formState.insuredPatient || "0", 10)
+      ) {
+        alert("ចំនួនអ្នកជំងឺមិនត្រូវគ្នា។");
+        return;
+      }
+
       const entriesToInsert = doctorEntries.map((entry) => ({
         doctor_name: entry.doctorName,
         total_patient: entry.numPatient || "0",
