@@ -139,7 +139,7 @@ export default function ReportFormTest({
       }
 
       // Validate form data
-      if (!validationForm(formState, doctorEntries)) {
+      if (!validationForm(formState, doctorEntries, scan)) {
         return; // If validation fails, stop the submission
       }
 
@@ -152,9 +152,9 @@ export default function ReportFormTest({
         date: formState.date, // Include the date in each entry
       }));
 
-      // const response = await axios.post("/api/report", {
-      //   entriesToInsert,
-      // });
+      const response = await axios.post("/api/report", {
+        entriesToInsert,
+      });
       // Convert the table to an image
       const image = await toPng(tableElement);
 

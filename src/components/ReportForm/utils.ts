@@ -1,4 +1,3 @@
-import { form } from "./config";
 import { DoctorEntry, FormState } from "./reportForm";
 
 const parseNum = (value: string | number) => {
@@ -12,7 +11,8 @@ const parseNum = (value: string | number) => {
 
 export const validationForm = (
   formState: FormState,
-  doctorEntries: DoctorEntry[]
+  doctorEntries: DoctorEntry[],
+  scan: boolean
 ) => {
   if (
     doctorEntries.reduce(
@@ -23,14 +23,18 @@ export const validationForm = (
     alert("ចំនួនអ្នកជំងឺមិនត្រូវគ្នា។");
     return false;
   }
-  // const totalInsuredPatient =
-  //   parseNum(formState.worker) +
-  //   parseNum(formState.government) +
-  //   parseNum(formState.dependent) +
-  //   parseNum(formState.workplaceIncident);
-  // if (parseNum(formState.insuredPatient) !== totalInsuredPatient) {
-  //   alert("ចំនួនអ្នកជំងឺមិនត្រឹមត្រូវ។");
-  //   return false;
-  // }
+  console.log("scan", parseNum(formState.scan));
+  if (!scan && parseNum(formState.scan) === 0) {
+    alert("សូមបញ្ចូលចំនួនស្កេន។");
+    return false;
+  }
+  const totalInsuredPatient =
+    parseNum(formState.worker) +
+    parseNum(formState.government) +
+    parseNum(formState.dependent);
+  if (parseNum(formState.insuredPatient) !== totalInsuredPatient) {
+    alert("ចំនួនអ្នកជំងឺមិនត្រឹមត្រូវ។");
+    return false;
+  }
   return true;
 };
