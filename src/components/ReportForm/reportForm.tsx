@@ -15,8 +15,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { toPng } from "html-to-image";
 import axios from "axios";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
+import { validationForm } from "./utils";
 
-interface DoctorEntry {
+export interface DoctorEntry {
   doctorName: string;
   numPatient: string;
   nightPatient: string;
@@ -32,11 +33,30 @@ interface ReportFormProps {
   clinic: string;
 }
 
+export interface FormState {
+  date: string; // Date in YYYY-MM-DD format
+  insuredPatient: string; // Number of insured patients
+  worker: string; // Number of workers
+  government: string; // Number of government officials
+  dependent: string; // Number of dependents
+  workplaceIncident: string; // Number of workplace incidents
+  insuredStayOver: string; // Number of insured patients staying overnight
+  general: string; // Number of general patients
+  generalStayOver: string; // Number of general patients staying overnight
+  income: string; // Income amount
+  ABA: string; // ABA income
+  Echo: string; // Echo count
+  Eva: string; // Eva count
+  Meuri: string; // Meuri count
+  picture: string; // Number of fingerprint scans without matches
+  scan: string; // Scan count
+}
+
 export default function ReportFormTest({
   doctorList,
   clinic,
 }: ReportFormProps) {
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<FormState>({
     date: new Date().toLocaleDateString("en-CA"), // Format as YYYY-MM-DD
     insuredPatient: "",
     worker: "",
@@ -119,14 +139,8 @@ export default function ReportFormTest({
       }
 
       // Validate form data
-      if (
-        doctorEntries.reduce(
-          (acc, entry) => acc + parseInt(entry.numPatient || "0", 10),
-          0
-        ) !== parseInt(formState.insuredPatient || "0", 10)
-      ) {
-        alert("ចំនួនអ្នកជំងឺមិនត្រូវគ្នា។");
-        return;
+      if (!validationForm(formState, doctorEntries)) {
+        return; // If validation fails, stop the submission
       }
 
       const entriesToInsert = doctorEntries.map((entry) => ({
@@ -138,9 +152,9 @@ export default function ReportFormTest({
         date: formState.date, // Include the date in each entry
       }));
 
-      const response = await axios.post("/api/report", {
-        entriesToInsert,
-      });
+      // const response = await axios.post("/api/report", {
+      //   entriesToInsert,
+      // });
       // Convert the table to an image
       const image = await toPng(tableElement);
 
