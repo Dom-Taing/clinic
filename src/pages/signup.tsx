@@ -29,8 +29,12 @@ export default function SignUp() {
     }
 
     try {
+      const cleanedUsername = username
+        .trim()
+        .replace(/\s+/g, "_")
+        .toLowerCase();
       const { data, error } = await supabase.auth.signUp({
-        email: `${username}@user.com`,
+        email: `${cleanedUsername}@user.com`,
         password,
       });
       if (error) {
