@@ -40,7 +40,7 @@ export default function Home({ clinic }: HomeProps) {
               key={clinic.id}
               elevation={2}
               onClick={() => {
-                window.location.href = `/${clinic.name}`;
+                window.location.href = `/form/${clinic.name}`;
               }}
             >
               <Link href={`/${clinic.name}`}>{clinic.name}</Link>
@@ -55,12 +55,13 @@ export default function Home({ clinic }: HomeProps) {
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (
   context
 ) => {
+  console.log("this got run");
   try {
     const clinicPlus = getCookieValue(context.req.headers.cookie, "clinicPlus");
     if (clinicPlus !== "ClinicPlus2025!") {
       return {
         redirect: {
-          destination: `/login?redirect=${context.resolvedUrl}`,
+          destination: `/password?redirect=${context.resolvedUrl}`,
           permanent: false,
         },
       };

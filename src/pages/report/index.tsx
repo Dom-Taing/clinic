@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
     if (clinicPlus !== "ClinicPlus2025!") {
       return {
         redirect: {
-          destination: `/login?redirect=${context.resolvedUrl}`,
+          destination: `/password?redirect=${context.resolvedUrl}`,
           permanent: false,
         },
       };

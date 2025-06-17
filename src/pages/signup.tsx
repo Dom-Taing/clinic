@@ -9,43 +9,35 @@ const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default function SignIn() {
+export default function SignUp() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirm password
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      setLoading(true);
-
-      // Get Auth
-      const { data } = await supabase.auth.getSession();
-      const session = data.session;
-      console.log("Session data:", session);
-      if (session) {
-        // Redirect to the sign-in page if no session is found
-        router.push("/");
-      }
-      setLoading(false);
-    };
-
-    checkAuth();
-  }, []);
-
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     setLoading(true);
     setError("");
+
+    // Validate that passwords match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
+      const { data, error } = await supabase.auth.signUp({
+        email: `${username}@user.com`,
         password,
       });
       if (error) {
         setError(error.message);
       } else {
-        alert("Sign-in successful!");
+        alert("Sign-up successful!");
+        router.push("/"); // Redirect to the home page or login page after sign-up
       }
     } catch (err) {
       setError("An unexpected error occurred.");
@@ -74,7 +66,7 @@ export default function SignIn() {
           }}
         >
           <Typography variant="h4" align="center" gutterBottom>
-            Sign In
+            Sign Up
           </Typography>
           <Box
             component="form"
@@ -87,11 +79,10 @@ export default function SignIn() {
             autoComplete="off"
           >
             <TextField
-              label="Email"
-              type="email"
+              label="username"
               fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
               label="Password"
@@ -99,6 +90,13 @@ export default function SignIn() {
               fullWidth
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+            />
+            <TextField
+              label="Confirm Password"
+              type="password"
+              fullWidth
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             {error && (
               <Typography color="error" variant="body2">
@@ -109,10 +107,10 @@ export default function SignIn() {
               variant="contained"
               color="primary"
               fullWidth
-              onClick={handleSignIn}
+              onClick={handleSignUp}
               disabled={loading}
             >
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? "Signing Up..." : "Sign Up"}
             </Button>
           </Box>
         </Paper>
