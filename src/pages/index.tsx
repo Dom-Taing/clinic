@@ -55,7 +55,6 @@ export default function Home({ clinic }: HomeProps) {
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (
   context
 ) => {
-  console.log("this got run");
   try {
     const clinicPlus = getCookieValue(context.req.headers.cookie, "clinicPlus");
     if (clinicPlus !== "ClinicPlus2025!") {
