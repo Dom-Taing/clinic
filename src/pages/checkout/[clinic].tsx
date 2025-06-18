@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
+import calculateDistance from "@/utils/calculateDistance";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL";
 const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default function CheckIn() {
+export default function CheckOut() {
   const router = useRouter();
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
@@ -22,19 +23,42 @@ export default function CheckIn() {
       const { data } = await supabase.auth.getSession();
       const session = data.session;
 
-      // Check if user have already checked in today
-      // If not, insert a new check-in record
+      if (!session) {
+        setError("No session found. Redirecting to login...");
+        router.push("/login");
+        setLoading(false);
+        return;
+      }
 
-      // Get the current session
+      try {
+        // Wait for the user's location
+        const position = await new Promise<GeolocationPosition>(
+          (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+          }
+        );
+        const { latitude, longitude } = position.coords;
+        // Calculate the distance to the target location
+        const distance = calculateDistance(
+          latitude,
+          longitude,
+          47.6256242,
+          -122.3571215
+        ); // Example coordinates for a location
 
-      // If session exists, proceed with check-in
-      if (session) {
+        if (distance >= 100) {
+          setError("You are not at the designated check-out location.");
+          setLoading(false);
+          return;
+        }
+
         // Get the authenticated user
         const user = session.user;
-        let { data: userData } = await supabase
+        const { data: userData } = await supabase
           .from("User")
           .select("*")
           .eq("user_id", user.id);
+
         const currentUser = userData?.[0];
         setUserName(currentUser.name); // Set the authenticated user
 
@@ -43,11 +67,10 @@ export default function CheckIn() {
           .from("work_time")
           .select("*")
           .eq("user_id", currentUser.id)
-          .eq("type", "check_in")
+          .eq("type", "check_out")
           .gte("time", new Date().toISOString().split("T")[0]); // Check for today's date
 
         if (checkInData && checkInData.length > 0) {
-          // User has already checked in today, redirect to the home page
           setError("You have already checked in today.");
           setLoading(false);
           return;
@@ -55,18 +78,18 @@ export default function CheckIn() {
 
         // Insert a new check-in record
         const currentDateTime = new Date().toISOString(); // ISO 8601 format for TIMESTAMPTZ
-        const { data } = await supabase.from("work_time").insert({
+        await supabase.from("work_time").insert({
           user_id: currentUser.id,
-          type: "check_in",
+          type: "check_out",
           time: currentDateTime,
         });
-        setCheckInTime(currentDateTime); // Set the check-in time
-      } else {
-        // Redirect to the sign-in page if no session is found
-        router.push("/signIn");
-      }
 
-      setLoading(false);
+        setCheckInTime(currentDateTime); // Set the check-in time
+      } catch (error) {
+        setError("Unable to retrieve location or complete check-out.");
+      } finally {
+        setLoading(false);
+      }
     };
 
     checkAuth();
@@ -78,7 +101,7 @@ export default function CheckIn() {
 
   return (
     <div>
-      <h1>Check-In Page</h1>
+      <h1>Check-Out Page</h1>
       {userName ? (
         <>
           <p>Welcome, {userName}!</p>
@@ -86,7 +109,7 @@ export default function CheckIn() {
             <p style={{ color: "red" }}>{error}</p>
           ) : (
             <p>
-              You have checked in successfully at{" "}
+              You have checked out successfully at{" "}
               {new Date(checkInTime).toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
