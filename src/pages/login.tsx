@@ -11,7 +11,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function SignIn() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,8 +38,12 @@ export default function SignIn() {
     setLoading(true);
     setError("");
     try {
+      const cleanedUsername = username
+        .trim()
+        .replace(/\s+/g, "_")
+        .toLowerCase();
       const { error } = await supabase.auth.signInWithPassword({
-        email,
+        email: `${cleanedUsername}@user.com`,
         password,
       });
       if (error) {
@@ -87,11 +91,10 @@ export default function SignIn() {
             autoComplete="off"
           >
             <TextField
-              label="Email"
-              type="email"
+              label="username"
               fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
               label="Password"
