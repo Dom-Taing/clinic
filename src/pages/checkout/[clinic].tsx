@@ -102,25 +102,19 @@ export default function CheckOut() {
   return (
     <div>
       <h1>Check-Out Page</h1>
-      {userName ? (
-        <>
-          <p>Welcome, {userName}!</p>
-          {error ? (
-            <p style={{ color: "red" }}>{error}</p>
-          ) : (
-            <p>
-              You have checked out successfully at{" "}
-              {new Date(checkInTime).toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: true, // Use true for 12-hour format, false for 24-hour format
-              })}{" "}
-            </p>
-          )}
-        </>
+      <p>Welcome, {userName}!</p>
+      {error ? (
+        <p style={{ color: "red" }}>{error}</p>
       ) : (
-        <p>Redirecting to sign-in...</p>
+        <p>
+          You have checked out successfully at{" "}
+          {new Date(checkInTime).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true, // Use true for 12-hour format, false for 24-hour format
+          })}{" "}
+        </p>
       )}
     </div>
   );
