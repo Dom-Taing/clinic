@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TextField, Button, Box, Typography, Paper } from "@mui/material";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
+import AdminPassword from "@/components/AdminPassword";
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL";
@@ -16,6 +17,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirm password
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleSignUp = async () => {
     setLoading(true);
@@ -49,6 +51,18 @@ export default function SignUp() {
       setLoading(false);
     }
   };
+
+  if (!isAdmin) {
+    return (
+      <main>
+        <AdminPassword
+          onAdmitted={() => {
+            setIsAdmin(true);
+          }}
+        />
+      </main>
+    );
+  }
 
   return (
     <main>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TextField, Button, Box, Typography, Paper } from "@mui/material";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
+import AdminPassword from "@/components/AdminPassword";
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL";
@@ -15,6 +16,7 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -23,7 +25,6 @@ export default function SignIn() {
       // Get Auth
       const { data } = await supabase.auth.getSession();
       const session = data.session;
-      console.log("Session data:", session);
       if (session) {
         // Redirect to the sign-in page if no session is found
         router.push("/");
@@ -37,26 +38,78 @@ export default function SignIn() {
   const handleSignIn = async () => {
     setLoading(true);
     setError("");
+
     try {
-      const cleanedUsername = username
-        .trim()
-        .replace(/\s+/g, "_")
-        .toLowerCase();
-      const { error } = await supabase.auth.signInWithPassword({
-        email: `${cleanedUsername}@user.com`,
-        password,
-      });
-      if (error) {
-        setError(error.message);
-      } else {
-        alert("Sign-in successful!");
+      const cleanedUsername = formatUsername(username);
+      const signInResponse = await signInUser(cleanedUsername, password);
+
+      if (signInResponse.error) {
+        setError(signInResponse.error.message);
+        return;
       }
+
+      const revokeResponse = await revokeOtherSessions();
+
+      if (revokeResponse.error) {
+        console.error(
+          "Error revoking other sessions:",
+          revokeResponse.error.message
+        );
+        setError("Failed to log out from other devices.");
+        return;
+      }
+
+      alert("Sign-in successful!");
+      router.push("/");
     } catch (err) {
+      console.error("Unexpected error:", err);
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
     }
   };
+
+  // Helper function to format the username
+  const formatUsername = (username: string): string => {
+    return username.trim().replace(/\s+/g, "_").toLowerCase();
+  };
+
+  // Helper function to sign in the user
+  const signInUser = async (username: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: `${username}@user.com`,
+        password,
+      });
+      return { data, error };
+    } catch (err) {
+      console.error("Error during sign-in:", err);
+      throw new Error("Failed to sign in.");
+    }
+  };
+
+  // Helper function to revoke other sessions
+  const revokeOtherSessions = async () => {
+    try {
+      const { error } = await supabase.auth.signOut({ scope: "others" });
+      return { error };
+    } catch (err) {
+      console.error("Error revoking other sessions:", err);
+      throw new Error("Failed to revoke other sessions.");
+    }
+  };
+
+  if (!isAdmin) {
+    return (
+      <main>
+        <AdminPassword
+          onAdmitted={() => {
+            setIsAdmin(true);
+          }}
+        />
+      </main>
+    );
+  }
 
   return (
     <main>
