@@ -1,0 +1,8 @@
+{
+  "cron": [
+    {
+      "path": "/api/dailySummary",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
