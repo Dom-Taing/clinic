@@ -245,11 +245,11 @@ const MedicalForm: React.FC<FormProps> = ({
           <FormControl fullWidth>
             <Grid container spacing={3}>
               {error.general && (
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Alert severity="error">{error.general}</Alert>
                 </Grid>
               )}
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="date-field"
                   label={formLabel.date}
@@ -262,7 +262,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <Autocomplete
                   disablePortal
                   options={doctorList.map((item) => item.name)}
@@ -298,10 +298,10 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid> */}
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <h2>Form</h2>
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="name-field"
                   label={formLabel.name}
@@ -313,7 +313,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   error={!!error.name}
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid size={{ xs: 2 }}>
                 <TextField
                   label={formLabel.sex}
                   fullWidth
@@ -330,7 +330,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   </MenuItem>
                 </TextField>
               </Grid>
-              <Grid item xs={4}>
+              <Grid size={{ xs: 4 }}>
                 <TextField
                   type="number"
                   label={formLabel.age}
@@ -349,7 +349,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Autocomplete
                   disablePortal
                   options={diagnosisList.map((item) => item.name)}
@@ -365,10 +365,10 @@ const MedicalForm: React.FC<FormProps> = ({
                 />
               </Grid>
               {/* Medicine */}
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <h3>Medicine</h3>
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <Autocomplete
                   disablePortal
                   options={medicineList.map((item) => item.medicine)}
@@ -390,7 +390,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid size={{ xs: 3 }}>
                 <TextField
                   type="number"
                   label={formLabel.amount}
@@ -407,7 +407,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   }}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid size={{ xs: 3 }}>
                 <Autocomplete
                   disablePortal
                   options={unitOptions}
@@ -422,7 +422,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid size={{ xs: 4 }}>
                 <Autocomplete
                   disablePortal
                   options={usageList.map((item) => item.usage)}
@@ -437,7 +437,7 @@ const MedicalForm: React.FC<FormProps> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid size={{ xs: 4 }}>
                 <TextField
                   label={formLabel.addInto}
                   fullWidth
@@ -458,8 +458,7 @@ const MedicalForm: React.FC<FormProps> = ({
                 </TextField>
               </Grid>
               <Grid
-                item
-                xs={4}
+                size={{ xs: 4 }}
                 style={{ display: "flex", alignItems: "center" }}
               >
                 <Button
@@ -472,10 +471,10 @@ const MedicalForm: React.FC<FormProps> = ({
                   {formLabel.addButton}
                 </Button>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <h3>{formLabel.medicineTitle}</h3>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <DataTable
                   header={[
                     { display: formLabel.medicine, key: "medicine" },
@@ -506,8 +505,7 @@ const MedicalForm: React.FC<FormProps> = ({
                 />
               </Grid>
               <Grid
-                item
-                xs={12}
+                size={{ xs: 12 }}
                 style={{
                   display: "flex",
                   justifyContent: "flex-end",

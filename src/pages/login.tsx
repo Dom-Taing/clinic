@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { TextField, Button, Box, Typography, Paper } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Paper,
+  Autocomplete,
+} from "@mui/material";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import AdminPassword from "@/components/AdminPassword";
+import { createSupaClient } from "@/service/supa";
+import { GetServerSideProps } from "next";
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL";
@@ -10,10 +19,14 @@ const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default function SignIn() {
+interface SignInProps {
+  doctorList: { id: string; name: string; clinic: { name: string }[] }[];
+}
+
+export default function SignIn({ doctorList }: SignInProps) {
   const router = useRouter();
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("1234567890");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -143,7 +156,20 @@ export default function SignIn() {
             noValidate
             autoComplete="off"
           >
-            <TextField
+            <Autocomplete
+              disablePortal
+              options={doctorList.map((item) => item.name)}
+              // freeSolo
+              value={username}
+              onChange={(e, newValue) => {
+                setUsername(newValue || "");
+              }}
+              autoSelect
+              renderInput={(params) => (
+                <TextField {...params} label={"user name"} />
+              )}
+            />
+            {/* <TextField
               label="username"
               fullWidth
               value={username}
@@ -155,7 +181,7 @@ export default function SignIn() {
               fullWidth
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-            />
+            /> */}
             {error && (
               <Typography color="error" variant="body2">
                 {error}
@@ -176,3 +202,28 @@ export default function SignIn() {
     </main>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<SignInProps> = async (
+  context
+) => {
+  try {
+    const supabase = createSupaClient();
+
+    let { data: doctor } = await supabase
+      .from("User")
+      .select("id, name, clinic (name)")
+      .eq("role", "doctor");
+
+    return {
+      props: {
+        doctorList: doctor || [],
+      },
+    };
+  } catch {
+    return {
+      props: {
+        doctorList: [],
+      },
+    };
+  }
+};

@@ -46,7 +46,7 @@ const LoginForm = () => {
       <StyledPaper elevation={2}>
         <FormControl fullWidth>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="password-field"
                 label="password"
@@ -57,7 +57,7 @@ const LoginForm = () => {
                 value={password}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Button variant="contained" color="primary" onClick={onSubmit}>
                 Submit
               </Button>

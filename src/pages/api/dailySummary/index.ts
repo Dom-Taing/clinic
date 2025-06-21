@@ -61,7 +61,6 @@ const formatData = (data: WorkTime[], userData: User[]) => {
     const existingItemIndex = formattedData.findIndex(
       (d) => d.userId === item.user_id
     );
-    console.log("Existing Item Index:", existingItemIndex);
     if (existingItemIndex !== -1) {
       if (item.type === "check_in") {
         formattedData[existingItemIndex].checkIn = convertToICT(item.time);

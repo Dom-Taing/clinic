@@ -190,11 +190,11 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
       >
         <FormControl fullWidth>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h2>Report Form</h2>
             </Grid>
             {Object.keys(translation).map((key) => (
-              <Grid item xs={3} key={key}>
+              <Grid size={{ xs: 3 }} key={key}>
                 <TextField
                   type="number"
                   label={translation[key as keyof typeof translation]}
@@ -213,11 +213,11 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 />
               </Grid>
             ))}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h3>Medicine</h3>
             </Grid>
             {medicineList.map((medicine) => (
-              <Grid item xs={3} key={medicine}>
+              <Grid size={{ xs: 3 }} key={medicine}>
                 <TextField
                   type="number"
                   label={medicine}
@@ -236,10 +236,10 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 />
               </Grid>
             ))}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h3>Doctor</h3>
             </Grid>
-            <Grid item xs={5}>
+            <Grid size={{ xs: 5 }}>
               <Autocomplete
                 disablePortal
                 options={doctorList} // Replace with actual doctor list
@@ -254,7 +254,7 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 )}
               />
             </Grid>
-            <Grid item xs={5}>
+            <Grid size={{ xs: 5 }}>
               <TextField
                 type="number"
                 label="Enter Value"
@@ -269,7 +269,10 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 }}
               />
             </Grid>
-            <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
+            <Grid
+              size={{ xs: 2 }}
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Button
                 variant="contained"
                 color="primary"
@@ -279,10 +282,10 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 Add
               </Button>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h3>Other Entries</h3>
             </Grid>
-            <Grid item xs={5}>
+            <Grid size={{ xs: 5 }}>
               <TextField
                 label="Enter Label"
                 variant="outlined"
@@ -293,7 +296,7 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 }}
               />
             </Grid>
-            <Grid item xs={5}>
+            <Grid size={{ xs: 5 }}>
               <TextField
                 label="Enter Value"
                 variant="outlined"
@@ -304,7 +307,10 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 }}
               />
             </Grid>
-            <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
+            <Grid
+              size={{ xs: 2 }}
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Button
                 variant="contained"
                 color="primary"
@@ -314,7 +320,7 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 Add
               </Button>
             </Grid>
-            <Grid item xs={1}>
+            <Grid size={{ xs: 1 }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -328,7 +334,7 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 label="Scan"
               />
             </Grid>
-            <Grid item xs={11}>
+            <Grid size={{ xs: 11 }}>
               {scan ? null : (
                 <TextField
                   type="number"
@@ -348,7 +354,7 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
                 />
               )}
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <DataTable
                 header={[
                   { display: "label", key: "label" },
@@ -373,8 +379,9 @@ export default function ReportForm({ doctorList }: ReportFormProps) {
               />
             </Grid>
             <Grid
-              item
-              xs={12}
+              size={{
+                xs: 12,
+              }}
               style={{
                 display: "flex",
                 justifyContent: "flex-end",

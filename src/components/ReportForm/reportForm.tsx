@@ -202,10 +202,10 @@ export default function ReportFormTest({
         <FormControl fullWidth>
           <Grid container spacing={2}>
             {/** Date Section */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h2>Date</h2>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 value={formState.date}
                 type="date"
@@ -217,10 +217,10 @@ export default function ReportFormTest({
               />
             </Grid>
             {/** ជំងឺប.ស.ស Section */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h2>ជំងឺប.ស.ស</h2>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="ជំងឺប.ស.ស"
@@ -229,7 +229,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="កម្មករ"
@@ -238,7 +238,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="មន្ត្រី"
@@ -247,7 +247,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="ស្វ័យនិយោជន៍"
@@ -256,7 +256,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="គ្រោះថ្នាក់ការងារ"
@@ -265,7 +265,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="សំរាកពេទ្យ"
@@ -275,10 +275,10 @@ export default function ReportFormTest({
               />
             </Grid>
             {/** ជំងឺទូទៅ Section */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h2>ជំងឺទូទៅ</h2>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="ជំងឺទូទៅ"
@@ -287,7 +287,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="ដេកពេទ្យ"
@@ -297,10 +297,10 @@ export default function ReportFormTest({
               />
             </Grid>
             {/** ចំណូល Section */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h2>ចំណូល</h2>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="ចំណូល"
@@ -309,7 +309,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="ABA"
@@ -319,10 +319,10 @@ export default function ReportFormTest({
               />
             </Grid>
             {/** គ្រូពេទ្យ Section */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h2>គ្រូពេទ្យ</h2>{" "}
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={{ xs: 4 }}>
               <Autocomplete
                 disablePortal
                 options={doctorList.map((doctor) => doctor.name)}
@@ -339,7 +339,7 @@ export default function ReportFormTest({
                 )}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="Number of Patients"
@@ -354,7 +354,7 @@ export default function ReportFormTest({
                 }
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="Night Patients"
@@ -369,7 +369,10 @@ export default function ReportFormTest({
                 }
               />
             </Grid>
-            <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
+            <Grid
+              size={{ xs: 2 }}
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Button
                 variant="contained"
                 color="primary"
@@ -379,7 +382,7 @@ export default function ReportFormTest({
                 Add
               </Button>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="Echo"
@@ -388,7 +391,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="Eva"
@@ -397,7 +400,7 @@ export default function ReportFormTest({
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="Meuri"
@@ -407,10 +410,10 @@ export default function ReportFormTest({
               />
             </Grid>
             {/** ស្កេនមេដៃអត់ជាប់ (រូបថត) Section */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h2>ស្កេនមេដៃអត់ជាប់ (រូបថត)</h2>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               <TextField
                 type="number"
                 label="ស្កេនមេដៃអត់ជាប់ (រូបថត)"
@@ -420,10 +423,10 @@ export default function ReportFormTest({
               />
             </Grid>
             {/** ស្កេន Section */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h2>ស្កេន</h2>
             </Grid>
-            <Grid item xs={2}>
+            <Grid size={{ xs: 2 }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -437,7 +440,7 @@ export default function ReportFormTest({
                 label="ស្កេនរួច"
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid size={{ xs: 1 }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -452,7 +455,7 @@ export default function ReportFormTest({
               />
             </Grid>
             {!scan && (
-              <Grid item xs={3}>
+              <Grid size={{ xs: 3 }}>
                 <TextField
                   type="number"
                   label="ស្កេន"
@@ -463,7 +466,7 @@ export default function ReportFormTest({
               </Grid>
             )}
             {/** Doctor Entries Section */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <DataTable
                 header={[
                   { display: "Doctor", key: "doctorName" },
@@ -490,8 +493,9 @@ export default function ReportFormTest({
               />
             </Grid>
             <Grid
-              item
-              xs={12}
+              size={{
+                xs: 12,
+              }}
               style={{
                 display: "flex",
                 justifyContent: "flex-end",
