@@ -94,7 +94,7 @@ export default async function handler(
 
     // Send the summary to Telegram
     const telegramBotToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
-    const telegramChatId = process.env.SOKSAN_WORKTIME_CHAT_ID; // Add your chat ID here
+    const telegramChatId = process.env.NEXT_SOKSAN_WORKTIME_CHAT_ID; // Add your chat ID here
     const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
 
     await axios.post(telegramApiUrl, {
