@@ -96,7 +96,7 @@ export default function CheckIn({ clinicLocation }: CheckInProps) {
 
         // Send the summary to Telegram
         const telegramBotToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
-        const telegramChatId = process.env.NEXT_SOKSAN_WORKTIME_CHAT_ID; // Add your chat ID here
+        const telegramChatId = process.env.NEXT_PUBLIC_SOKSAN_WORKTIME_CHAT_ID; // Add your chat ID here
         const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
         const summaryMessage = `Doctor: ${
           currentUser.name_kh
@@ -104,7 +104,7 @@ export default function CheckIn({ clinicLocation }: CheckInProps) {
 
         await axios.post(telegramApiUrl, {
           chat_id: telegramChatId,
-          text: `Daily Summary:\n\n${summaryMessage}`,
+          text: summaryMessage,
           parse_mode: "Markdown", // Optional: Use Markdown for formatting
         });
 
