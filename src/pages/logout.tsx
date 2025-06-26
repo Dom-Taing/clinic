@@ -2,14 +2,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
 import AdminPassword from "@/components/AdminPassword";
-
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL";
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { useSupabase } from "@/context/supabase";
 
 export default function Logout() {
+  const supabase = useSupabase();
   const router = useRouter();
   const [error, setError] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);

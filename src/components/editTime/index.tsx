@@ -20,20 +20,58 @@ import { TimePicker } from "@mui/x-date-pickers";
 import { set } from "date-fns";
 import { FormattedWorkTime } from "@/types/workTime";
 import { convertToDefault } from "@/utils/workTime/convertToTimeZone";
+import { createClient } from "@supabase/supabase-js";
+import { formatWorkTimeData } from "@/utils/workTime/formatWorkTime";
+import { useSupabase } from "@/context/supabase";
 
 interface EditTimeProps {
   workTimeData: FormattedWorkTime[];
 }
 
 export default function EditTime({ workTimeData }: EditTimeProps) {
+  const supabase = useSupabase();
   const [loading, setLoading] = useState(false);
   const [isFormEnabled, setIsFormEnabled] = useState(true); // State to control form enable/disable
+  const [date, setDate] = useState<string>(
+    new Date().toLocaleDateString("en-CA")
+  ); // State to control the date field
+
   const [checkInTime, setCheckInTime] = useState<Date | null>(null); // State to control the TimePicker
   const [checkOutTime, setCheckOutTime] = useState<Date | null>(null); // State to control the TimePicker
   const [doctor, setDoctor] = useState<string | null>("hello"); // State to control the selected doctor
   const [workTime, setWorkTime] = useState<FormattedWorkTime[]>(
     workTimeData || []
   );
+
+  useEffect(() => {
+    const fetchWorkTime = async () => {
+      setLoading(true);
+      try {
+        // convert user selected date from their timezone to UTC format
+        const selectedDate = new Date(date);
+        const startTime = selectedDate.toISOString();
+
+        selectedDate.setDate(selectedDate.getDate() + 1); // Set to the next day to include the whole day
+        const endTime = selectedDate.toISOString();
+
+        const { data, error } = await supabase
+          .from("work_time") // Replace with your table name
+          .select("*")
+          .gte("time", startTime)
+          .lte("time", endTime);
+
+        console.log("Fetched work time data:", data);
+        console.log("Error fetching work time data:", error);
+
+        // setWorkTime(formatData || []);
+      } catch (error) {
+        console.error("Error fetching work time data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWorkTime();
+  }, [date]);
 
   return (
     <>
@@ -44,6 +82,21 @@ export default function EditTime({ workTimeData }: EditTimeProps) {
       >
         <FormControl fullWidth>
           <Grid container spacing={2}>
+            <Grid size={{ xs: 4 }}>
+              <TextField
+                id="date-field"
+                label={"Date"}
+                fullWidth
+                onChange={(e) => {
+                  setDate(e.target.value);
+                }}
+                name="date"
+                value={date}
+                type="date"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid size={{ xs: 8 }}></Grid>
             <Grid size={{ xs: 4 }}>
               <TextField
                 label="Doctor"

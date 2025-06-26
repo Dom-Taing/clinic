@@ -7,17 +7,13 @@ import { GetServerSideProps } from "next";
 import { getCookieValue } from "@/utils/parseCookie";
 import axios from "axios";
 import { convertToDefault } from "@/utils/workTime/convertToTimeZone";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL";
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
-const supabase = createClient(supabaseUrl, supabaseKey);
-
+import { useSupabase } from "@/context/supabase";
 interface CheckOutProps {
   clinicLocation: string;
 }
 
 export default function CheckOut({ clinicLocation }: CheckOutProps) {
+  const supabase = useSupabase();
   const router = useRouter();
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);

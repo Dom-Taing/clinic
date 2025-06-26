@@ -3,14 +3,10 @@ import { TextField, Button, Box, Typography, Paper } from "@mui/material";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import AdminPassword from "@/components/AdminPassword";
-
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL";
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { useSupabase } from "@/context/supabase";
 
 export default function SignUp() {
+  const supabase = useSupabase();
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

@@ -12,18 +12,13 @@ import { useRouter } from "next/router";
 import AdminPassword from "@/components/AdminPassword";
 import { createSupaClient } from "@/service/supa";
 import { GetServerSideProps } from "next";
-
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL";
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
-const supabase = createClient(supabaseUrl, supabaseKey);
-
+import { useSupabase } from "@/context/supabase";
 interface SignInProps {
   doctorList: { id: string; name: string; clinic: { name: string }[] }[];
 }
 
 export default function SignIn({ doctorList }: SignInProps) {
+  const supabase = useSupabase();
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("1234567890");
