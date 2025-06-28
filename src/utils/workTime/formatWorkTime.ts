@@ -1,12 +1,7 @@
 import { FormattedWorkTime, WorkTime } from "@/types/workTime";
 import { calculateDuration } from "./calculateDuration";
 
-interface User {
-  id: string; // UUID
-  name_kh: string; // Khmer name
-}
-
-export const formatWorkTimeData = (data: WorkTime[], userData: User[]) => {
+export const formatWorkTimeData = (data: WorkTime[]) => {
   let formattedData: FormattedWorkTime[] = [];
   data.forEach((item) => {
     const existingItemIndex = formattedData.findIndex(
@@ -20,8 +15,7 @@ export const formatWorkTimeData = (data: WorkTime[], userData: User[]) => {
       }
     } else {
       formattedData.push({
-        userName:
-          userData.find((user) => user.id === item.user_id)?.name_kh || "",
+        userName: item.User.name_kh,
         checkIn: item.type === "check_in" ? item.time : null,
         checkOut: item.type === "check_out" ? item.time : null,
         userId: item.user_id,

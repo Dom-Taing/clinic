@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { toZonedTime, format } from "date-fns-tz";
 import { formatWorkTimeData } from "@/utils/workTime/formatWorkTime";
 import { convertToTimeZone } from "@/utils/workTime/convertToTimeZone";
+import { WorkTime } from "@/types/workTime";
 
 // Initialize Supabase client with the Service Role Key
 const supabase = createClient(
@@ -59,54 +60,77 @@ export default async function handler(
       timeZone: "UTC",
     });
 
-    // const now = new Date(); // Current date and time
-    // const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
-
     const { data, error } = await supabase
       .from("work_time") // Replace with your table name
-      .select("*")
+      .select("*, User (id, name_kh, clinic)")
       .gte("time", yesterdayUTC)
       .lte("time", nowUTCString); // Filter for entries within the last 24 hours;
 
-    const { data: userData, error: userError } = await supabase
-      .from("User") // Replace with your actual table name
-      .select("id, name_kh") // Select all columns or specify the columns you need
-      .in("id", data?.map((entry) => entry.user_id) || []); // Filter for IDs in the provided array
+    const clinicIds = Array.from(
+      new Set(
+        (data || []).map((workTime) => workTime.User.clinic).filter(Boolean)
+      )
+    );
+    const { data: telegramData, error: telegramError } = await supabase
+      .from("telegram_groups")
+      .select("*")
+      .eq("function", "work_time")
+      .in("clinic_id", clinicIds);
 
-    const formattedData = formatWorkTimeData(data || [], userData || []);
+    const clinicWorkTimeMap: Record<string, WorkTime[]> = {};
+    data?.forEach((workTime) => {
+      const clinicId = workTime.User.clinic;
+      if (!clinicWorkTimeMap[clinicId]) {
+        clinicWorkTimeMap[clinicId] = [];
+      }
+      clinicWorkTimeMap[clinicId].push(workTime);
+    });
 
-    if (error || userError) {
-      console.error("Error querying database:", error || userError);
+    const formattedClinicWorkTime = Object.entries(clinicWorkTimeMap).map(
+      ([clinicId, workTimes]) => ({
+        clinicId,
+        workTimes: formatWorkTimeData(workTimes),
+      })
+    );
+    if (error || telegramError) {
+      console.error("Error querying database:", error || telegramError);
       return res.status(500).json({ error: "Error querying database" });
     }
 
-    const summaryMessage = formattedData
-      .map(
-        (entry) =>
-          `Doctor: ${entry.userName}\nTime: ${convertToTimeZone(
-            entry.checkIn,
-            timeZone
-          )}-${convertToTimeZone(entry.checkOut, timeZone)}\nDuration: ${
-            entry.duration || "N/A"
-          }\n`
-      )
-      .join("\n");
-
-    // Send the summary to Telegram
     const telegramBotToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
-    const telegramChatId = process.env.NEXT_PUBLIC_SOKSAN_WORKTIME_CHAT_ID; // Add your chat ID here
     const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
 
-    await axios.post(telegramApiUrl, {
-      chat_id: telegramChatId,
-      text: `Daily Summary:\n\n${summaryMessage}`,
-      parse_mode: "Markdown", // Optional: Use Markdown for formatting
-    });
+    await Promise.all(
+      formattedClinicWorkTime.map(async (clinicWorkTime) => {
+        const clinicId = clinicWorkTime.clinicId;
+        const telegramGroup = telegramData?.find(
+          (group) => group.clinic_id === clinicId
+        ).group_code;
+        if (telegramGroup) {
+          const summaryMessage = clinicWorkTime.workTimes
+            .map(
+              (entry) =>
+                `Doctor: ${entry.userName}\nTime: ${convertToTimeZone(
+                  entry.checkIn,
+                  timeZone
+                )}-${convertToTimeZone(entry.checkOut, timeZone)}\nDuration: ${
+                  entry.duration || "N/A"
+                }\n`
+            )
+            .join("\n");
+          await axios.post(telegramApiUrl, {
+            chat_id: telegramGroup,
+            text: `Daily Summary:\n\n${summaryMessage}`,
+            parse_mode: "Markdown", // Optional: Use Markdown for formatting
+          });
+        }
+      })
+    );
 
     // Optionally, send the summary via email or log it elsewhere
     return res.status(200).json({
       message: "Daily summary generated successfully",
-      data: formattedData,
+      data: formattedClinicWorkTime,
     });
   } catch (err) {
     console.error("Unexpected error:", err);

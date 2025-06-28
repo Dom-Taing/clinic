@@ -4,6 +4,11 @@ export interface WorkTime {
   user_id: string; // UUID
   time: string; // ISO 8601 timestamp
   type: "check_in" | "check_out"; // Enum for type
+  User: {
+    id: string; // UUID
+    name_kh: string; // Khmer name
+    clinic: string; // clinic id
+  };
 }
 
 export interface FormattedWorkTime {

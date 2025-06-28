@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { createClient } from "@supabase/supabase-js";
 import calculateDistance from "@/utils/calculateDistance";
 import { createSupaClient } from "@/service/supa";
 import { getCookieValue } from "@/utils/parseCookie";
@@ -39,7 +38,25 @@ export default function CheckIn({ clinicLocation }: CheckInProps) {
         // Wait for the user's location
         const position = await new Promise<GeolocationPosition>(
           (resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject);
+            navigator.geolocation.getCurrentPosition(resolve, (err) => {
+              // Custom error handling for location failure
+              if (err.code === 1) {
+                // PERMISSION_DENIED
+                setError(
+                  "Location permission denied. Please allow location access to check in."
+                );
+              } else if (err.code === 2) {
+                // POSITION_UNAVAILABLE
+                setError("Location information is unavailable.");
+              } else if (err.code === 3) {
+                // TIMEOUT
+                setError("Location request timed out. Please try again.");
+              } else {
+                setError("Unable to retrieve your location.");
+              }
+              setLoading(false);
+              reject(err);
+            });
           }
         );
         const { latitude, longitude } = position.coords;
@@ -90,9 +107,15 @@ export default function CheckIn({ clinicLocation }: CheckInProps) {
           time: currentDateTime,
         });
 
+        const { data: telegramData, error: telegramError } = await supabase
+          .from("telegram_groups")
+          .select("*")
+          .eq("function", "work_time")
+          .eq("clinic_id", userData?.[0].clinic);
+
         // Send the summary to Telegram
         const telegramBotToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
-        const telegramChatId = process.env.NEXT_PUBLIC_SOKSAN_WORKTIME_CHAT_ID; // Add your chat ID here
+        const telegramChatId = telegramData?.[0].group_code;
         const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
         const summaryMessage = `Doctor: ${
           currentUser.name_kh
@@ -106,7 +129,9 @@ export default function CheckIn({ clinicLocation }: CheckInProps) {
 
         setCheckInTime(currentDateTime); // Set the check-in time
       } catch (error) {
-        setError("Unable to retrieve location or complete check-in.");
+        setError((prev) =>
+          prev ? prev : "Unable to retrieve location or complete check-in."
+        );
       } finally {
         setLoading(false);
       }
