@@ -69,11 +69,11 @@ export default function CheckOut({ clinicLocation }: CheckOutProps) {
           clinicCoords[1]
         ); // Example coordinates for a location
 
-        // if (distance >= 100) {
-        //   setError("You are not at the designated check-out location.");
-        //   setLoading(false);
-        //   return;
-        // }
+        if (distance >= 100) {
+          setError("You are not at the designated check-out location.");
+          setLoading(false);
+          return;
+        }
 
         // Get the authenticated user
         const user = session.user;
