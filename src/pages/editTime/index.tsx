@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<EditTimePageProps> = async (
       .select("id, name_kh") // Select all columns or specify the columns you need
       .in("id", data?.map((entry) => entry.user_id) || []); // Filter for IDs in the provided array
 
-    const formattedData = formatWorkTimeData(data || [], userData || []);
+    const formattedData = formatWorkTimeData(data || []);
     console.log("Formatted Data:", formattedData);
 
     return {
