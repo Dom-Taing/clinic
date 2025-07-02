@@ -85,13 +85,16 @@ export default function CheckOut({ clinicLocation }: CheckOutProps) {
         const currentUser = userData?.[0];
         setUserName(currentUser.name); // Set the authenticated user
 
+        const todayISOTtime = new Date(
+          new Date().toLocaleDateString()
+        ).toISOString();
         // Check if the user has already checked in today
         const { data: checkOutData } = await supabase
           .from("work_time")
           .select("*")
           .eq("user_id", currentUser.id)
           .eq("type", "check_out")
-          .gte("time", new Date().toISOString().split("T")[0]); // Check for today's date
+          .gte("time", todayISOTtime); // Check for today's date
 
         if (checkOutData && checkOutData.length > 0) {
           setError("You have already checked out today.");
