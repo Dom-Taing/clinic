@@ -98,7 +98,20 @@ export default function CheckIn({ clinicLocation }: CheckInProps) {
           .gte("time", todayISOTtime); // Check for today's date
 
         if (checkInData && checkInData.length > 0) {
-          setError("You have already checked in today.");
+          const lastCheckIn = checkInData[0].time;
+          const lastCheckInDate = new Date(lastCheckIn).toLocaleTimeString(
+            "en-US",
+            {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: true, // Use true for 12-hour format, false for 24-hour format
+            }
+          );
+          setError(`You have already checked in today at ${lastCheckInDate}`);
           setLoading(false);
           return;
         }
@@ -158,6 +171,9 @@ export default function CheckIn({ clinicLocation }: CheckInProps) {
         <p>
           You have checked in successfully at{" "}
           {new Date(checkInTime).toLocaleTimeString("en-US", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
             hour: "2-digit",
             minute: "2-digit",
             second: "2-digit",
