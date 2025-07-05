@@ -85,8 +85,11 @@ export default function CheckIn({ clinicLocation }: CheckInProps) {
         const currentUser = userData?.[0];
         setUserName(currentUser.name); // Set the authenticated user
 
+        const now = new Date();
         const todayISOTtime = new Date(
-          new Date().toLocaleDateString()
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate()
         ).toISOString();
 
         // Check if the user has already checked in today
