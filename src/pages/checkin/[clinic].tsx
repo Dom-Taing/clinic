@@ -192,15 +192,6 @@ export const getServerSideProps: GetServerSideProps<CheckInProps> = async (
   context
 ) => {
   try {
-    const clinicPlus = getCookieValue(context.req.headers.cookie, "clinicPlus");
-    if (clinicPlus !== "ClinicPlus2025!") {
-      return {
-        redirect: {
-          destination: `/password?redirect=${context.resolvedUrl}`,
-          permanent: false,
-        },
-      };
-    }
     const { clinic } = context.params as { clinic: string };
     const supabase = createSupaClient();
 
