@@ -42,29 +42,35 @@ export default async function handler(
 
   try {
     const timeZone = "Asia/Bangkok";
+    const minusHours = 7; // Number of hours to subtract for ICT time adjustment
 
     // Get current ICT time
     const nowUTC = new Date(); // Current UTC time
-    const nowICT = toZonedTime(nowUTC, timeZone); // Convert UTC to ICT
+    const nowICT = new Date(nowUTC.getTime() + minusHours * 60 * 60 * 1000);
 
     // Get yesterday's ICT date
-    const yesterdayICT = new Date(nowICT);
-    yesterdayICT.setDate(yesterdayICT.getDate() - 1); // Subtract one day
-    yesterdayICT.setHours(0, 0, 0, 0); // Set to midnight
-
-    // Convert ICT times to UTC for querying the database
-    const yesterdayUTC = format(yesterdayICT, "yyyy-MM-dd'T'HH:mm:ssXXX", {
-      timeZone: "UTC",
-    });
-    const nowUTCString = format(nowICT, "yyyy-MM-dd'T'HH:mm:ssXXX", {
-      timeZone: "UTC",
-    });
+    const yesterdayICT = new Date(
+      Date.UTC(
+        nowICT.getFullYear(),
+        nowICT.getMonth(),
+        nowICT.getDate() - 1,
+        24 - minusHours
+      )
+    );
+    const todayICT = new Date(
+      Date.UTC(
+        nowICT.getFullYear(),
+        nowICT.getMonth(),
+        nowICT.getDate(),
+        24 - minusHours
+      )
+    );
 
     const { data, error } = await supabase
       .from("work_time") // Replace with your table name
       .select("*, User (id, name_kh, clinic)")
-      .gte("time", yesterdayUTC)
-      .lte("time", nowUTCString); // Filter for entries within the last 24 hours;
+      .gte("time", yesterdayICT.toISOString())
+      .lte("time", todayICT.toISOString()); // Filter for entries within the last 24 hours;
 
     const clinicIds = Array.from(
       new Set(
@@ -92,6 +98,7 @@ export default async function handler(
         workTimes: formatWorkTimeData(workTimes),
       })
     );
+
     if (error || telegramError) {
       console.error("Error querying database:", error || telegramError);
       return res.status(500).json({ error: "Error querying database" });
@@ -103,9 +110,10 @@ export default async function handler(
     await Promise.all(
       formattedClinicWorkTime.map(async (clinicWorkTime) => {
         const clinicId = clinicWorkTime.clinicId;
-        const telegramGroup = telegramData?.find(
-          (group) => group.clinic_id === clinicId
-        ).group_code;
+        // const telegramGroup = telegramData?.find(
+        //   (group) => group.clinic_id === clinicId
+        // ).group_code;
+        const telegramGroup = "1319084557";
         if (telegramGroup) {
           const summaryMessage = clinicWorkTime.workTimes
             .map(
@@ -115,7 +123,7 @@ export default async function handler(
                   timeZone
                 )}-${convertToTimeZone(entry.checkOut, timeZone)}\nDuration: ${
                   entry.duration || "N/A"
-                }\n`
+                }\nType: ${entry.type}\n`
             )
             .join("\n");
           await axios.post(telegramApiUrl, {
