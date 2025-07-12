@@ -110,10 +110,9 @@ export default async function handler(
     await Promise.all(
       formattedClinicWorkTime.map(async (clinicWorkTime) => {
         const clinicId = clinicWorkTime.clinicId;
-        // const telegramGroup = telegramData?.find(
-        //   (group) => group.clinic_id === clinicId
-        // ).group_code;
-        const telegramGroup = "1319084557";
+        const telegramGroup = telegramData?.find(
+          (group) => group.clinic_id === clinicId
+        ).group_code;
         if (telegramGroup) {
           const summaryMessage = clinicWorkTime.workTimes
             .map(
