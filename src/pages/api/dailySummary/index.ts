@@ -53,7 +53,7 @@ export default async function handler(
       Date.UTC(
         nowICT.getFullYear(),
         nowICT.getMonth(),
-        nowICT.getDate() - 1,
+        nowICT.getDate() - 2,
         24 - minusHours
       )
     );
@@ -61,7 +61,7 @@ export default async function handler(
       Date.UTC(
         nowICT.getFullYear(),
         nowICT.getMonth(),
-        nowICT.getDate(),
+        nowICT.getDate() - 1,
         24 - minusHours
       )
     );
