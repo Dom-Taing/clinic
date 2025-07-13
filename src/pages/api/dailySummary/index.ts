@@ -125,9 +125,12 @@ export default async function handler(
                 }\nType: ${entry.type}\n`
             )
             .join("\n");
+          const summaryDate = `${nowICT.getDate() - 1}/${
+            nowICT.getMonth() + 1
+          }/${nowICT.getFullYear()}`;
           await axios.post(telegramApiUrl, {
             chat_id: telegramGroup,
-            text: `Daily Summary:\n\n${summaryMessage}`,
+            text: `Daily Summary:\n${summaryDate}\n\n${summaryMessage}`,
             parse_mode: "Markdown", // Optional: Use Markdown for formatting
           });
         }
