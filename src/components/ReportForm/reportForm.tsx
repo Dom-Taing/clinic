@@ -16,6 +16,7 @@ import { toPng } from "html-to-image";
 import axios from "axios";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
 import { validationForm } from "./utils";
+import { useSupabase } from "@/context/supabase";
 
 export interface DoctorEntry {
   doctorName: string;
@@ -56,6 +57,7 @@ export default function ReportFormTest({
   doctorList,
   clinic,
 }: ReportFormProps) {
+  const supabase = useSupabase();
   const [formState, setFormState] = useState<FormState>({
     date: new Date().toLocaleDateString("en-CA"), // Format as YYYY-MM-DD
     insuredPatient: "",
@@ -151,9 +153,15 @@ export default function ReportFormTest({
           ?.id,
         date: formState.date, // Include the date in each entry
       }));
+      const reportData = {
+        date: formState.date,
+        insuredPatient: formState.insuredPatient,
+        insuredStayOver: formState.insuredStayOver,
+      };
 
       const response = await axios.post("/api/report", {
         entriesToInsert,
+        reportData,
       });
       // Convert the table to an image
       const image = await toPng(tableElement);

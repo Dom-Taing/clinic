@@ -4,6 +4,10 @@
     {
       "path": "/api/dailySummary",
       "schedule": "0 23 * * *"
+    },
+    {
+      "path": "/api/monthlyReport",
+      "schedule": "59 23 28-31 * *"
     }
   ]
 }

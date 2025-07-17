@@ -15,10 +15,11 @@
     "@mui/material": "^7.1.2",
     "@mui/x-date-pickers": "^8.5.3",
     "@supabase/supabase-js": "^2.43.1",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "cookie": "^1.0.2",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
+    "form-data": "^4.0.3",
     "html-to-image": "^1.11.13",
     "js-cookie": "^3.0.5",
     "next": "14.2.3",
@@ -26,7 +27,8 @@
     "pdfkit-table": "^0.1.99",
     "print-js": "^1.6.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
