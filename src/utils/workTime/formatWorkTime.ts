@@ -13,18 +13,18 @@ export const formatWorkTimeData = (data: WorkTime[]) => {
       const ICTTime = new Date(dutyTime.getTime() + 7 * 60 * 60 * 1000); // Convert to ICT (UTC+7)
       const dutyCheckIn = new Date(
         Date.UTC(
-          ICTTime.getFullYear(),
-          ICTTime.getMonth(),
-          ICTTime.getDate(),
+          ICTTime.getUTCFullYear(),
+          ICTTime.getUTCMonth(),
+          ICTTime.getUTCDate(),
           19 - 7 // 7 pm ICT
         )
       );
       const dutyCheckOut = new Date(
         Date.UTC(
-          ICTTime.getFullYear(),
-          ICTTime.getMonth(),
-          ICTTime.getDate() + 1,
-          7 - 7 // 7 pm ICT
+          ICTTime.getUTCFullYear(),
+          ICTTime.getUTCMonth(),
+          ICTTime.getUTCDate() + 1,
+          7 - 7 // 7 am ICT
         )
       );
       dutydata.push({
@@ -53,6 +53,15 @@ export const formatWorkTimeData = (data: WorkTime[]) => {
         duration: null, // Duration will be calculated later
       });
     }
+  });
+  formattedData = formattedData.map((entry) => {
+    const haveDuty = dutydata.find((item) => item.userId === entry.userId);
+    const dutyCheckInTime = haveDuty?.checkIn;
+    const checkOutTime = dutyCheckInTime ? dutyCheckInTime : entry.checkOut;
+    return {
+      ...entry,
+      checkOut: checkOutTime,
+    };
   });
   formattedData = formattedData.concat(dutydata).map((entry) => {
     const duration =
