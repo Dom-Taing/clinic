@@ -16,7 +16,8 @@ export const formatWorkTimeData = (data: WorkTime[]) => {
           ICTTime.getUTCFullYear(),
           ICTTime.getUTCMonth(),
           ICTTime.getUTCDate(),
-          19 - 7 // 7 pm ICT
+          19 - 7, // 7 pm ICT
+          30 // 30 minutes
         )
       );
       const dutyCheckOut = new Date(
@@ -24,7 +25,8 @@ export const formatWorkTimeData = (data: WorkTime[]) => {
           ICTTime.getUTCFullYear(),
           ICTTime.getUTCMonth(),
           ICTTime.getUTCDate() + 1,
-          7 - 7 // 7 am ICT
+          7 - 7, // 7 am ICT
+          30 // 30 minutes
         )
       );
       dutydata.push({
