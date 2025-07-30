@@ -7,7 +7,7 @@
     },
     {
       "path": "/api/monthlyReport",
-      "schedule": "59 23 28-31 * *"
+      "schedule": "0 5 1 * *"
     }
   ]
 }
