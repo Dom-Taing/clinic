@@ -153,21 +153,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method === "GET") {
       const now = new Date();
-      const tomorrow = new Date(now);
-      tomorrow.setDate(now.getDate() + 1);
-
-      const isLastDayOfMonth = tomorrow.getDate() === 1;
-
       // if (!isLastDayOfMonth) {
       //   return res
       //     .status(200)
       //     .json({ message: "Not the last day of the month, skipping job." });
       // }
       const firstDay = new Date(
-        Date.UTC(now.getFullYear(), now.getMonth(), 1)
+        Date.UTC(now.getFullYear(), now.getMonth() - 1, 1)
       ).toISOString();
       const firstDayNextMonth = new Date(
-        Date.UTC(now.getFullYear(), now.getMonth() + 1, 1)
+        Date.UTC(now.getFullYear(), now.getMonth(), 1)
       ).toISOString();
 
       const { data, error } = await supabase
